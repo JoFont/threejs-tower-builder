@@ -2,8 +2,6 @@
 
 This repo contains a bare-bones of what will become a Three js Tower Builder game `hopefully`.
 
-*See also https://github.com/rollup/rollup-starter-lib*
-
 
 ## Getting started
 
@@ -20,3 +18,7 @@ npm install
 `npm run watch` will continually rebuild the application as your source files change.
 
 `npm run dev` will run `npm start` and `npm run watch` in parallel.
+
+## Resources
+
+1. [Three js Docs](https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene)
