@@ -13,20 +13,21 @@ function init() {
 
     // Rendereer
     renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
     document.body.appendChild( renderer.domElement );
     
     // Camera
-    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-    camera.position.set( 15, 20, 30 );
+    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
+    camera.position.set( 15, 8, 30 );
     scene.add( camera );
 
     // light
-    var light = new THREE.PointLight( 0xffffff, 1 );
+    let light = new THREE.PointLight( 0xffffff, 1 );
     camera.add( light );
 
     // Display Axes
-    let axesHelper = new THREE.AxesHelper( 40 );
+    let axesHelper = new THREE.AxesHelper( 100 );
     scene.add( axesHelper );
     
     // Cube
