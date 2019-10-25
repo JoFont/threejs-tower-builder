@@ -21,4 +21,5 @@ npm install
 
 ## Resources
 
-1. [Three js Docs](https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene)
+1. [Rollup Package Bundler Docs](https://rollupjs.org/guide/en/) 
+2. [Three js Docs](https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene)
