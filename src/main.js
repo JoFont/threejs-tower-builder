@@ -54,15 +54,15 @@ function init() {
     let cube2SizeX = cube2.geometry.vertices[0].x;
     let cube2SizeZ = cube2.geometry.vertices[0].z;
 
-    let testV = {
-        x: cube2.position.x - cube.position.x,
-        y: cube2.position.y - cube.position.y,
-        z: cube2.position.z - cube.position.z
+    let testRemainder = {
+        x: cube2.geometry.parameters.width - cube2.position.x,
+        y: cube2.geometry.parameters.height,
+        z: cube2.geometry.parameters.depth - cube2.position.z,
     };
 
-    console.log(cube2.geometry.vertices);
+    console.log(cube2.geometry.parameters);
 
-    let geometryResult = new THREE.BoxGeometry(testV.x, 2, cube2SizeZ * 2);
+    let geometryResult = new THREE.BoxGeometry(testRemainder.x, testRemainder.y, testRemainder.z);
 	let material3 = new THREE.MeshBasicMaterial({ color: "rgb(235, 64, 52)" });
 	cube3 = new THREE.Mesh(geometryResult, material3);
     cube3.position.y = 7;
