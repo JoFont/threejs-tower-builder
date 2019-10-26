@@ -1,55 +1,5 @@
 import * as THREE from "three";
 
-// let scene, camera, renderer, cube, cube2, cube3;
-
-
-
-// class Setup {
-// 	constructor() {
-// 		this.render = () => {
-// 			this.renderer.render(this.scene, this.camera);
-// 		};
-
-// 		this.add = el => {
-// 			this.scene.add(el);
-// 		};
-
-// 		this.remove = el => {
-// 			this.scene.remove(el);
-// 		};
-
-// 		this.container = document.getElementById("game");
-
-// 		// Renderer
-// 		this.renderer = new THREE.WebGLRenderer({
-//             antialias: true,
-//             alpha: false
-// 		});
-		
-// 		this.renderer.setSize(window.innerWidth, window.innerHeight);
-//         this.renderer.setClearColor('#D0CBC7', 1);
-// 		this.container.appendChild(this.renderer.domElement);
-		
-// 		// Scene
-// 		this.scene = new THREE.Scene();
-
-// 		// Camera
-// 		let aspectRatio = window.innerWidth / window.innerHeight;
-//         let d = 20;
-//         this.camera = new THREE.OrthographicCamera(-d * aspectRatio, d * aspectRatio, d, -d, -100, 1000);
-//         this.camera.position.x = 2;
-//         this.camera.position.y = 2;
-//         this.camera.position.z = 2;
-// 		this.camera.lookAt(new THREE.Vector3(0, 0, 0));
-		
-// 		//light
-//         this.light = new THREE.DirectionalLight(0xffffff, 0.5);
-//         this.light.position.set(0, 499, 0);
-//         this.scene.add(this.light);
-//         this.softLight = new THREE.AmbientLight(0xffffff, 0.4);
-//         this.scene.add(this.softLight);
-// 	}
-// }
 
 const Colors = {
 	red:0xf25346,
@@ -96,12 +46,46 @@ scene.add(axesHelper);
 
 // A group of Blocks
 let blockGroup = new THREE.Group();
+let currentBlock = {};
+let workingPlane = {
+	length: 20,
+	vector: "x",
+	dir: "forward"
+};
 
 
 
 const newBlock = () => {
 	// References the last block in the group of blocks
 	let prevBlock = blockGroup.children[blockGroup.children.length - 1];
+	let blockGeo = {
+		x: prevBlock.geometry.parameters.width,
+		y: prevBlock.geometry.parameters.height,
+		z: prevBlock.geometry.parameters.depth,
+	};
+
+	// Gets position based on the position of the last element in the Group of blocks
+	let blockPos = {
+		x: prevBlock.position.x,
+		y: prevBlock.position.y + blockGeo.y,
+		z: prevBlock.position.z
+	}
+
+	let geometry = new THREE.BoxGeometry(blockGeo.x, blockGeo.y, blockGeo.z);
+	let material = new THREE.MeshToonMaterial({ color: Colors.brown, shading: THREE.FlatShading });
+
+	let block = new THREE.Mesh(geometry, material);
+	block.position.set(blockPos.x, blockPos.y, blockPos.z);
+
+	// Renders the new block
+	blockGroup.add(block);
+	currentBlock = blockGroup.children[blockGroup.children.length - 1];
+	console.log(currentBlock)
+}
+
+const placeBlock = () => {
+	let prevBlock = blockGroup.children[blockGroup.children.length - 1];
+
 	let blockGeo = {
 		x: prevBlock.geometry.parameters.width - prevBlock.position.x,
 		y: prevBlock.geometry.parameters.height,
@@ -110,24 +94,18 @@ const newBlock = () => {
 
 	// Gets position based on the position of the last element in the Group of blocks
 	let blockPos = {
-		x: prevBlock.position.x / 2,
-		y: prevBlock.position.y + 2,
-		z: prevBlock.position.z / 2
+		x: prevBlock.position.x,
+		y: prevBlock.position.y + blockGeo.y,
+		z: prevBlock.position.z
 	}
 
-	let geometry = new THREE.BoxGeometry(blockGeo.x, blockGeo.y, blockGeo.z);
-	let material = new THREE.MeshToonMaterial({ color: Colors.brown, shading: THREE.FlatShading });
-
-	let block = new THREE.Mesh(geometry, material);
-	block.position.set(blockPos.x, blockPos.y, blockPos.z);
-	blockGroup.add(block);
+	console.log(currentBlock);
 }
 
 // Cubes
-let geometry = new THREE.BoxGeometry(20, 2, 20);
+let geometry = new THREE.BoxGeometry(10, 2, 10);
 let material1 = new THREE.MeshToonMaterial({ color: 0x00ff00, shading: THREE.FlatShading });
 let cube = new THREE.Mesh(geometry, material1);
-// cube.rotation.y = 0.8;
 
 scene.add(cube);
 
@@ -137,12 +115,8 @@ let cube2 = new THREE.Mesh(geometry, material2);
 
 cube2.position.y = cube.scale.y * 2;
 cube2.position.x = 3;
-// cube2.rotation.y = 0.8;
 
 scene.add(cube2);
-
-let cube2SizeX = cube2.geometry.vertices[0].x;
-let cube2SizeZ = cube2.geometry.vertices[0].z;
 
 let cube3Size = {
 	x: cube2.geometry.parameters.depth - cube2.position.x,
@@ -205,6 +179,24 @@ function gameLoop() {
 	// cube.rotation.x += 0.01;
 	// cube.rotation.y += 0.01;
 
+	// currentBlock.rotation.y -= 0.01;
+
+	let speed = 0.1;
+
+	if (workingPlane.vector === "x" && currentBlock.position.z < workingPlane.length && workingPlane.dir === "forward") {
+		currentBlock.position.z += speed;
+	} else {
+		workingPlane.dir = "back";
+	}
+	
+	if (workingPlane.vector === "x" && - currentBlock.position.z < workingPlane.length && workingPlane.dir === "back") {
+		currentBlock.position.z -= speed;
+	} else {
+		workingPlane.dir = "forward";
+	}
+
+	console.log(currentBlock.position)
+	
 	renderer.render(scene, camera);
 }
 
