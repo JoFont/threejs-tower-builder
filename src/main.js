@@ -46,13 +46,16 @@ scene.add(axesHelper);
 
 // A group of Blocks
 let blockGroup = new THREE.Group();
+
 let currentBlock = {};
+
 let workingPlane = {
 	length: 20,
 	vector: "x",
 	dir: "forward"
-};
+}
 
+let blockState = "ACTIVE";
 
 
 const newBlock = () => {
@@ -80,24 +83,53 @@ const newBlock = () => {
 	// Renders the new block
 	blockGroup.add(block);
 	currentBlock = blockGroup.children[blockGroup.children.length - 1];
-	console.log(currentBlock)
+	console.log(currentBlock);
+	blockState = "ACTIVE";
+	
 }
 
 const placeBlock = () => {
-	let prevBlock = blockGroup.children[blockGroup.children.length - 1];
+	let prevBlock = blockGroup.children[blockGroup.children.length - 2];
+
+	// FIXME: Geometry and position calculations only workwhen block is moving in positive direction
 
 	let blockGeo = {
-		x: prevBlock.geometry.parameters.width - prevBlock.position.x,
+		x: prevBlock.geometry.parameters.width - currentBlock.position.x + prevBlock.position.x,
 		y: prevBlock.geometry.parameters.height,
-		z: prevBlock.geometry.parameters.depth - prevBlock.position.z,
+		z: prevBlock.geometry.parameters.depth - currentBlock.position.z + prevBlock.position.z,
 	};
 
 	// Gets position based on the position of the last element in the Group of blocks
+
 	let blockPos = {
-		x: prevBlock.position.x,
-		y: prevBlock.position.y + blockGeo.y,
-		z: prevBlock.position.z
+		x: currentBlock.position.x - ((currentBlock.geometry.parameters.width - blockGeo.x) / 2),
+		y: currentBlock.position.y,
+		z: currentBlock.position.z - ((currentBlock.geometry.parameters.depth - blockGeo.z) / 2)
 	}
+
+
+	console.log("POS: " + (blockPos.x - blockGeo.x));
+
+	// TODO: Its Commented out but loss detection works
+	// if(blockPos.x - blockGeo.x > prevBlock.geometry.parameters.width) {
+	// 	alert("YOU LOST SUCKER");
+	// }
+
+	let geometry = new THREE.BoxGeometry(blockGeo.x, blockGeo.y, blockGeo.z);
+	let material = new THREE.MeshToonMaterial({ color: Colors.pink, shading: THREE.FlatShading });
+
+	let block = new THREE.Mesh(geometry, material);
+	block.position.set(blockPos.x, blockPos.y, blockPos.z);
+
+	// Renders the new block
+	blockGroup.remove(currentBlock);
+	scene.remove(currentBlock);
+	blockGroup.add(block);
+
+	newBlock();
+	b
+
+	console.log(blockGeo);
 
 	console.log(currentBlock);
 }
@@ -151,6 +183,7 @@ scene.add(blockGroup);
 
 newBlock();
 
+
 console.log(blockGroup.children);
 
 
@@ -170,7 +203,12 @@ function onWindowResize() {
 	camera.updateProjectionMatrix();
 }
 
-
+document.addEventListener('keydown', e =>  {
+    if(e.keyCode === 32) {
+		blockState = "PLACE";
+		placeBlock();
+    }
+});
 
 
 function gameLoop() {
@@ -183,19 +221,28 @@ function gameLoop() {
 
 	let speed = 0.1;
 
-	if (workingPlane.vector === "x" && currentBlock.position.z < workingPlane.length && workingPlane.dir === "forward") {
-		currentBlock.position.z += speed;
-	} else {
-		workingPlane.dir = "back";
+	if (blockState === "ACTIVE") {
+		// Move Block
+		if (workingPlane.vector === "x" && currentBlock.position.x < workingPlane.length && workingPlane.dir === "forward") {
+			currentBlock.position.x += speed;
+		} else if (workingPlane.vector === "z" && currentBlock.position.x < workingPlane.length && workingPlane.dir === "forward") {
+			currentBlock.position.z += speed;
+		} else {
+			workingPlane.dir = "back";
+		}
+
+		if (workingPlane.vector === "x" && - currentBlock.position.x < workingPlane.length && workingPlane.dir === "back") {
+			currentBlock.position.x -= speed;
+		} else if (workingPlane.vector === "z" && currentBlock.position.z < workingPlane.length && workingPlane.dir === "back") {
+			currentBlock.position.z -= speed;
+		} else {
+			workingPlane.dir = "forward";
+		}
 	}
 	
-	if (workingPlane.vector === "x" && - currentBlock.position.z < workingPlane.length && workingPlane.dir === "back") {
-		currentBlock.position.z -= speed;
-	} else {
-		workingPlane.dir = "forward";
-	}
+	
 
-	console.log(currentBlock.position)
+	// console.log(currentBlock.position)
 	
 	renderer.render(scene, camera);
 }
