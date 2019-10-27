@@ -51,7 +51,7 @@ let currentBlock = {};
 
 let workingPlane = {
 	length: 20,
-	axis: "x",
+	axis: "z",
 	forward: true
 }
 
@@ -69,9 +69,9 @@ const newBlock = () => {
 
 	// Gets position based on the position of the last element in the Group of blocks
 	let blockPos = {
-		x: prevBlock.position.x,
+		x: workingPlane.axis === "z" ? prevBlock.position.x - workingPlane.length : prevBlock.position.x,
 		y: prevBlock.position.y + blockGeo.y,
-		z: prevBlock.position.z
+		z: workingPlane.axis === "x" ? prevBlock.position.z - workingPlane.length : prevBlock.position.z
 	}
 
 	let geometry = new THREE.BoxGeometry(blockGeo.x, blockGeo.y, blockGeo.z);
