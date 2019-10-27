@@ -51,7 +51,7 @@ let currentBlock = {};
 
 let workingPlane = {
 	length: 20,
-	vector: "x",
+	axis: "x",
 	dir: "forward"
 }
 
@@ -85,6 +85,7 @@ const newBlock = () => {
 	currentBlock = blockGroup.children[blockGroup.children.length - 1];
 	blockGroup.position.y -= 2;
 	console.log(currentBlock);
+	workingPlane.axis === "x" ? workingPlane.axis = "z" : workingPlane.axis = "x";
 	blockState = "ACTIVE";
 	
 }
@@ -110,21 +111,55 @@ const placeBlock = () => {
 		z: currentBlock.position.z
 	}
 
+
+
 	// FIXME: Geometry and position calculations only workwhen block is moving in positive direction
-	let blockGeo = {
-		x: lastBlockProps.width - currentBlockProps.x + lastBlockProps.x,
-		y: lastBlockProps.height,
-		z: lastBlockProps.depth - currentBlockProps.z + lastBlockProps.z,
-	};
+
+	let blockGeo = {};
 
 	// Gets position based on the position of the last element in the Group of blocks
 
-	let blockPos = {
-		x: currentBlockProps.x - ((currentBlockProps.width - blockGeo.x) / 2),
-		y: currentBlockProps.y,
-		z: currentBlockProps.z - ((currentBlockProps.depth - blockGeo.z) / 2)
-	};
+	let blockPos = {};
 
+	if (workingPlane.axis === "x" && currentBlockProps.x - lastBlockProps.x > 0 || workingPlane.axis === "z" && currentBlockProps.z - lastBlockProps.z > 0) {
+		blockGeo = {
+			x: lastBlockProps.width - currentBlockProps.x + lastBlockProps.x,
+			y: lastBlockProps.height,
+			z: lastBlockProps.depth - currentBlockProps.z + lastBlockProps.z,
+		};
+
+		blockPos = {
+			x: currentBlockProps.x - ((currentBlockProps.width - blockGeo.x) / 2),
+			y: currentBlockProps.y,
+			z: currentBlockProps.z - ((currentBlockProps.depth - blockGeo.z) / 2)
+		}
+	} else {
+		blockGeo = {
+			x: lastBlockProps.width + currentBlockProps.x - lastBlockProps.x,
+			y: lastBlockProps.height,
+			z: lastBlockProps.depth + currentBlockProps.z - lastBlockProps.z,
+		};
+
+		blockPos = {
+			x: currentBlockProps.x + ((currentBlockProps.width - blockGeo.x) / 2),
+			y: currentBlockProps.y,
+			z: currentBlockProps.z + ((currentBlockProps.depth - blockGeo.z) / 2),
+		}
+	}
+
+
+
+	// blockGeo = {
+	// 	x: lastBlockProps.width - currentBlockProps.x + lastBlockProps.x,
+	// 	y: lastBlockProps.height,
+	// 	z: lastBlockProps.depth - currentBlockProps.z + lastBlockProps.z,
+	// };
+
+	// blockPos = {
+	// 	x: currentBlockProps.x - ((currentBlockProps.width - blockGeo.x) / 2),
+	// 	y: currentBlockProps.y,
+	// 	z: currentBlockProps.z - ((currentBlockProps.depth - blockGeo.z) / 2)
+	// }
 
 	console.log("POS: " + (blockPos.x - blockGeo.x));
 
@@ -134,7 +169,8 @@ const placeBlock = () => {
 	// }
 
 	let geometry = new THREE.BoxGeometry(blockGeo.x, blockGeo.y, blockGeo.z);
-	let material = new THREE.MeshToonMaterial({ color: Colors.pink, shading: THREE.FlatShading });
+	let material = new THREE.MeshToonMaterial({ color: Colors.pink, shading: THREE.FlatShading});
+
 
 	let block = new THREE.Mesh(geometry, material);
 	block.position.set(blockPos.x, blockPos.y, blockPos.z);
@@ -146,7 +182,7 @@ const placeBlock = () => {
 
 	newBlock();
 
-	console.log(blockGeo);
+	console.log(blockGeo, blockPos);
 
 	console.log(currentBlock);
 }
@@ -240,23 +276,26 @@ function gameLoop() {
 
 	if (blockState === "ACTIVE") {
 		// Move Block
-		if (workingPlane.vector === "x" && currentBlock.position.x < workingPlane.length && workingPlane.dir === "forward") {
+
+		// FIXME: Logic broken, doesnt trigger any else so it doesnt switch direction
+		
+		if (workingPlane.axis === "x" && currentBlock.position.x + speed < workingPlane.length && workingPlane.dir === "forward") {
 			currentBlock.position.x += speed;
-		} else if (workingPlane.vector === "z" && currentBlock.position.x < workingPlane.length && workingPlane.dir === "forward") {
+		} else if (workingPlane.axis === "z" && currentBlock.position.z + speed < workingPlane.length && workingPlane.dir === "forward") {
 			currentBlock.position.z += speed;
 		} else {
 			workingPlane.dir = "back";
 		}
 
-		if (workingPlane.vector === "x" && - currentBlock.position.x < workingPlane.length && workingPlane.dir === "back") {
+		if (workingPlane.axis === "x" && - currentBlock.position.x + speed < workingPlane.length && workingPlane.dir === "back") {
 			currentBlock.position.x -= speed;
-		} else if (workingPlane.vector === "z" && currentBlock.position.z < workingPlane.length && workingPlane.dir === "back") {
+		} else if (workingPlane.axis === "z" && currentBlock.position.z + speed < workingPlane.length && workingPlane.dir === "back") {
 			currentBlock.position.z -= speed;
 		} else {
 			workingPlane.dir = "forward";
 		}
 	}
-	
+	console.log(currentBlock.position.z);
 	
 
 	// console.log(currentBlock.position)
