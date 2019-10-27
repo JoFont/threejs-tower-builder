@@ -52,7 +52,7 @@ let currentBlock = {};
 let workingPlane = {
 	length: 20,
 	axis: "x",
-	dir: "forward"
+	forward: true
 }
 
 let blockState = "ACTIVE";
@@ -112,9 +112,6 @@ const placeBlock = () => {
 	}
 
 
-
-	// FIXME: Geometry and position calculations only workwhen block is moving in positive direction
-
 	let blockGeo = {};
 
 	// Gets position based on the position of the last element in the Group of blocks
@@ -147,22 +144,6 @@ const placeBlock = () => {
 		}
 	}
 
-
-
-	// blockGeo = {
-	// 	x: lastBlockProps.width - currentBlockProps.x + lastBlockProps.x,
-	// 	y: lastBlockProps.height,
-	// 	z: lastBlockProps.depth - currentBlockProps.z + lastBlockProps.z,
-	// };
-
-	// blockPos = {
-	// 	x: currentBlockProps.x - ((currentBlockProps.width - blockGeo.x) / 2),
-	// 	y: currentBlockProps.y,
-	// 	z: currentBlockProps.z - ((currentBlockProps.depth - blockGeo.z) / 2)
-	// }
-
-	console.log("POS: " + (blockPos.x - blockGeo.x));
-
 	// TODO: Its Commented out but loss detection works
 	// if(blockPos.x - blockGeo.x > lastBlockProps.width) {
 	// 	alert("YOU LOST SUCKER");
@@ -181,10 +162,6 @@ const placeBlock = () => {
 	blockGroup.add(block);
 
 	newBlock();
-
-	console.log(blockGeo, blockPos);
-
-	console.log(currentBlock);
 }
 
 // Cubes
@@ -264,38 +241,25 @@ document.addEventListener('keydown', e =>  {
 });
 
 
+
 function gameLoop() {
 	requestAnimationFrame(gameLoop);
 
-	// cube.rotation.x += 0.01;
-	// cube.rotation.y += 0.01;
-
-	// currentBlock.rotation.y -= 0.01;
-
-	let speed = 0.1;
-
 	if (blockState === "ACTIVE") {
-		// Move Block
-
-		// FIXME: Logic broken, doesnt trigger any else so it doesnt switch direction
 		
-		if (workingPlane.axis === "x" && currentBlock.position.x + speed < workingPlane.length && workingPlane.dir === "forward") {
-			currentBlock.position.x += speed;
-		} else if (workingPlane.axis === "z" && currentBlock.position.z + speed < workingPlane.length && workingPlane.dir === "forward") {
-			currentBlock.position.z += speed;
-		} else {
-			workingPlane.dir = "back";
-		}
+		// Move Block
+		let speed = 0.1;
 
-		if (workingPlane.axis === "x" && - currentBlock.position.x + speed < workingPlane.length && workingPlane.dir === "back") {
-			currentBlock.position.x -= speed;
-		} else if (workingPlane.axis === "z" && currentBlock.position.z + speed < workingPlane.length && workingPlane.dir === "back") {
-			currentBlock.position.z -= speed;
+		if (workingPlane.forward === true && currentBlock.position[workingPlane.axis] + speed < workingPlane.length) {
+			currentBlock.position[workingPlane.axis] += speed;
+		} else if (workingPlane.forward === false && currentBlock.position[workingPlane.axis] + speed > - workingPlane.length) {
+			currentBlock.position[workingPlane.axis] -= speed;
 		} else {
-			workingPlane.dir = "forward";
+			workingPlane.forward = !workingPlane.forward;
 		}
+		
 	}
-	console.log(currentBlock.position.z);
+	// console.log(currentBlock.position.z, workingPlane.dir);
 	
 
 	// console.log(currentBlock.position)
