@@ -83,35 +83,53 @@ const newBlock = () => {
 	// Renders the new block
 	blockGroup.add(block);
 	currentBlock = blockGroup.children[blockGroup.children.length - 1];
+	blockGroup.position.y -= 2;
 	console.log(currentBlock);
 	blockState = "ACTIVE";
 	
 }
 
 const placeBlock = () => {
-	let prevBlock = blockGroup.children[blockGroup.children.length - 2];
+	let lastBlockRef = blockGroup.children[blockGroup.children.length - 2];
+
+	let lastBlockProps = {
+		width: lastBlockRef.geometry.parameters.width,
+		height: lastBlockRef.geometry.parameters.height,
+		depth: lastBlockRef.geometry.parameters.depth,
+		x: lastBlockRef.position.x,
+		y: lastBlockRef.position.y,
+		z: lastBlockRef.position.z
+	};
+
+	let currentBlockProps = {
+		width: currentBlock.geometry.parameters.width,
+		height: currentBlock.geometry.parameters.height,
+		depth: currentBlock.geometry.parameters.depth,
+		x: currentBlock.position.x,
+		y: currentBlock.position.y,
+		z: currentBlock.position.z
+	}
 
 	// FIXME: Geometry and position calculations only workwhen block is moving in positive direction
-
 	let blockGeo = {
-		x: prevBlock.geometry.parameters.width - currentBlock.position.x + prevBlock.position.x,
-		y: prevBlock.geometry.parameters.height,
-		z: prevBlock.geometry.parameters.depth - currentBlock.position.z + prevBlock.position.z,
+		x: lastBlockProps.width - currentBlockProps.x + lastBlockProps.x,
+		y: lastBlockProps.height,
+		z: lastBlockProps.depth - currentBlockProps.z + lastBlockProps.z,
 	};
 
 	// Gets position based on the position of the last element in the Group of blocks
 
 	let blockPos = {
-		x: currentBlock.position.x - ((currentBlock.geometry.parameters.width - blockGeo.x) / 2),
-		y: currentBlock.position.y,
-		z: currentBlock.position.z - ((currentBlock.geometry.parameters.depth - blockGeo.z) / 2)
-	}
+		x: currentBlockProps.x - ((currentBlockProps.width - blockGeo.x) / 2),
+		y: currentBlockProps.y,
+		z: currentBlockProps.z - ((currentBlockProps.depth - blockGeo.z) / 2)
+	};
 
 
 	console.log("POS: " + (blockPos.x - blockGeo.x));
 
 	// TODO: Its Commented out but loss detection works
-	// if(blockPos.x - blockGeo.x > prevBlock.geometry.parameters.width) {
+	// if(blockPos.x - blockGeo.x > lastBlockProps.width) {
 	// 	alert("YOU LOST SUCKER");
 	// }
 
@@ -127,7 +145,6 @@ const placeBlock = () => {
 	blockGroup.add(block);
 
 	newBlock();
-	b
 
 	console.log(blockGeo);
 
