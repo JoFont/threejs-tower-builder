@@ -245,8 +245,7 @@ document.addEventListener('keydown', e =>  {
 function gameLoop() {
 	requestAnimationFrame(gameLoop);
 
-	if (blockState === "ACTIVE") {
-		
+	if (blockState === "ACTIVE") {	
 		// Move Block
 		let speed = 0.1;
 
@@ -257,7 +256,6 @@ function gameLoop() {
 		} else {
 			workingPlane.forward = !workingPlane.forward;
 		}
-		
 	}
 	// console.log(currentBlock.position.z, workingPlane.dir);
 	
