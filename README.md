@@ -8,6 +8,8 @@ This repo contains a bare-bones of what will become a Three js Tower Builder gam
 Clone this repository and install its dependencies:
 
 ```bash
+clone
+cd threejs-tower-builder
 npm install
 ```
 
