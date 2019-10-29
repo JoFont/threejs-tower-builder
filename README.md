@@ -1,4 +1,4 @@
-# Three JS Game
+# Three JS - Tower Builder
 
 This repo contains a bare-bones of what will become a Three js Tower Builder game `hopefully`.
 
