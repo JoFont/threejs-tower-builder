@@ -23,3 +23,4 @@ npm install
 
 1. [Rollup Package Bundler Docs](https://rollupjs.org/guide/en/) 
 2. [Three js Docs](https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene)
+3. [Tween Max Docs](https://greensock.com/docs/TweenMax)
