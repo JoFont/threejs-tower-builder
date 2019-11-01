@@ -26,7 +26,7 @@ function loop() {
 
 	if (testGame.state.blockState === "ACTIVE") {	
 		// Move Block
-		let speed = 0.1;
+		let speed = 0.2;
 
 		if (testGame.state.plane.forward === true && testGame.state.activeBlock.position[testGame.state.plane.axis] + speed < testGame.state.plane.length) {
 			testGame.state.activeBlock.position[testGame.state.plane.axis] += speed;

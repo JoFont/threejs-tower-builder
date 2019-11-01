@@ -11,6 +11,7 @@ const Colors = {
 
 export class Game {
 	constructor(mode, props) {
+        this.mode = mode || "single-player";
 		this.props = {
 			windowWidth: props.width,
 			windowHeight: props.height,
