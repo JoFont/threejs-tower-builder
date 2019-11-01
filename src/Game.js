@@ -69,16 +69,13 @@ export class Game {
                 axis: "z",
                 forward: true
             },
-            blockState: "ACTIVE"
+            blockState: "ACTIVE",
+            activeColor: {
+                h: 70,
+                s: 100,
+                l: 78,
+            }
         }
-
-		this.activeBlock = {};
-		this.workingPlane = {
-			length: 20,
-			axis: "z",
-			forward: true
-		};
-		this.blockState = "ACTIVE";
 	}
 
 	stage() {
@@ -106,7 +103,7 @@ export class Game {
         this.setActiveBlock();
 	}   
 
-	start() {
+	render() {
 		this.renderer.render(this.scene, this.camera);
     }
     
@@ -122,7 +119,7 @@ export class Game {
 
         let newBlockProps = {};
         
-        if (this.state.plane.axis === "x" && activeBlockProps.x - lastBlockProps.x > 0 || this.workingPlane.axis === "z" && activeBlockProps.z - lastBlockProps.z > 0) {
+        if (this.state.plane.axis === "x" && activeBlockProps.x - lastBlockProps.x > 0 || this.state.plane.axis === "z" && activeBlockProps.z - lastBlockProps.z > 0) {
 
             newBlockProps = this.calcNewBlockProps(this.state.lastBlock, this.state.activeBlock, true);
         } else {
@@ -162,12 +159,18 @@ export class Game {
 
         let calculatedProps = {};
 
+        this.state.activeColor.h + 10 >= 100 ? this.state.activeColor.h = 0 : this.state.activeColor.h += 10
         // Calculate Geometry & Position
         if(positiveSide) {
             calculatedProps = {
                 width: lastBlockProps.width - activeBlockProps.x + lastBlockProps.x,
                 height: lastBlockProps.height,
                 depth: lastBlockProps.depth - activeBlockProps.z + lastBlockProps.z,
+                color: {
+                    h: this.state.activeColor.h,
+                    s: this.state.activeColor.s,
+                    l: this.state.activeColor.l
+                }
             }
 
             calculatedProps.x = activeBlockProps.x - ((activeBlockProps.width - calculatedProps.width) / 2);
@@ -181,6 +184,11 @@ export class Game {
                 width: lastBlockProps.width + activeBlockProps.x - lastBlockProps.x,
                 height: lastBlockProps.height,
                 depth: lastBlockProps.depth + activeBlockProps.z - lastBlockProps.z,
+                color: {
+                    h: this.state.activeColor.h,
+                    s: this.state.activeColor.s,
+                    l: this.state.activeColor.l
+                }
             }
 
             calculatedProps.x = activeBlockProps.x + ((activeBlockProps.width - calculatedProps.width) / 2);
@@ -210,16 +218,22 @@ class Block {
                 z: plane.axis === "x" ? lastBlock.position.z - plane.length : lastBlock.position.z,
                 width: lastBlock.geometry.parameters.width,
                 height: lastBlock.geometry.parameters.height,
-                depth: lastBlock.geometry.parameters.depth
+                depth: lastBlock.geometry.parameters.depth,
+                color: {...this.game.state.activeColor}
             }
         } else {
             this.props = {
-                x: props.x || 0,
-                y: props.y || 0,
-                z: props.z || 0,
-                width: props.width || 10,
-                height: props.height || 2,
-                depth: props.depth || 10
+                x: props.x,
+                y: props.y,
+                z: props.z,
+                width: props.width,
+                height: props.height,
+                depth: props.depth,
+                color: {
+                    h: 70,
+                    s: 10,
+                    l: 21
+                }
             };
         }
 		
@@ -229,7 +243,7 @@ class Block {
 			this.props.depth
 		);
 		this.material = new THREE.MeshToonMaterial({
-			color: Colors.brown,
+			color: `hsl(${this.props.color.h}, ${this.props.color.s}%, ${this.props.color.l}%)`,
 			shading: THREE.FlatShading
 		});
 		this.block = new THREE.Mesh(this.geometry, this.material);

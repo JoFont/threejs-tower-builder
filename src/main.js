@@ -37,7 +37,7 @@ function loop() {
 		}
 	}
 
-	testGame.start();
+	testGame.render();
 }
 
 loop();
