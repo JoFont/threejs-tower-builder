@@ -24,16 +24,16 @@ function loop() {
 
 	// console.log(testGame.blockState);
 
-	if (testGame.blockState === "ACTIVE") {	
+	if (testGame.state.blockState === "ACTIVE") {	
 		// Move Block
 		let speed = 0.1;
 
-		if (testGame.workingPlane.forward === true && testGame.activeBlock.position[testGame.workingPlane.axis] + speed < testGame.workingPlane.length) {
-			testGame.activeBlock.position[testGame.workingPlane.axis] += speed;
-		} else if (testGame.workingPlane.forward === false && testGame.activeBlock.position[testGame.workingPlane.axis] + speed > - testGame.workingPlane.length) {
-			testGame.activeBlock.position[testGame.workingPlane.axis] -= speed;
+		if (testGame.state.plane.forward === true && testGame.state.activeBlock.position[testGame.state.plane.axis] + speed < testGame.state.plane.length) {
+			testGame.state.activeBlock.position[testGame.state.plane.axis] += speed;
+		} else if (testGame.state.plane.forward === false && testGame.state.activeBlock.position[testGame.state.plane.axis] + speed > - testGame.state.plane.length) {
+			testGame.state.activeBlock.position[testGame.state.plane.axis] -= speed;
 		} else {
-			testGame.workingPlane.forward = !testGame.workingPlane.forward;
+			testGame.state.plane.forward = !testGame.state.plane.forward;
 		}
 	}
 

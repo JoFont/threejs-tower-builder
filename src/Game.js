@@ -61,6 +61,17 @@ export class Game {
         this.group = new THREE.Group();
         this.scene.add(this.group);
 
+        this.state = {
+            activeBlock: {},
+            lastBlock: {},
+            plane: {
+                length: 20,
+                axis: "z",
+                forward: true
+            },
+            blockState: "ACTIVE"
+        }
+
 		this.activeBlock = {};
 		this.workingPlane = {
 			length: 20,
@@ -101,81 +112,85 @@ export class Game {
     
     placeBlock() {
 
-        this.blockState = "PLACING";
+        this.state.blockState = "PLACING";
 
-        let lastBlock = this.group.children[this.group.children.length - 2];
+        this.state.lastBlock = this.group.children[this.group.children.length - 2];
 
-        let lastBlockProps = {
-            width: lastBlock.geometry.parameters.width,
-            height: lastBlock.geometry.parameters.height,
-            depth: lastBlock.geometry.parameters.depth,
-            x: lastBlock.position.x,
-            y: lastBlock.position.y,
-            z: lastBlock.position.z 
-        };
 
-        let activeBlockProps = {
-            width: this.activeBlock.geometry.parameters.width,
-            height: this.activeBlock.geometry.parameters.height,
-            depth: this.activeBlock.geometry.parameters.depth,
-            x: this.activeBlock.position.x,
-            y: this.activeBlock.position.y,
-            z: this.activeBlock.position.z
-        };
+        let lastBlockProps = this.extractBlockProps(this.state.lastBlock);
+        let activeBlockProps = this.extractBlockProps(this.state.activeBlock);
 
-        let blockGeo = {};
-        let blockPos = {};
+        let newBlockProps = {};
         
-        if (this.workingPlane.axis === "x" && activeBlockProps.x - lastBlockProps.x > 0 || this.workingPlane.axis === "z" && activeBlockProps.z - lastBlockProps.z > 0) {
-            blockGeo = {
-                x: lastBlockProps.width - activeBlockProps.x + lastBlockProps.x,
-                y: lastBlockProps.height,
-                z: lastBlockProps.depth - activeBlockProps.z + lastBlockProps.z,
-            };
-    
-            blockPos = {
-                x: activeBlockProps.x - ((activeBlockProps.width - blockGeo.x) / 2),
-                y: activeBlockProps.y,
-                z: activeBlockProps.z - ((activeBlockProps.depth - blockGeo.z) / 2)
-            }
+        if (this.state.plane.axis === "x" && activeBlockProps.x - lastBlockProps.x > 0 || this.workingPlane.axis === "z" && activeBlockProps.z - lastBlockProps.z > 0) {
+
+            newBlockProps = this.calcNewBlockProps(this.state.lastBlock, this.state.activeBlock, true);
         } else {
-            blockGeo = {
-                x: lastBlockProps.width + activeBlockProps.x - lastBlockProps.x,
-                y: lastBlockProps.height,
-                z: lastBlockProps.depth + activeBlockProps.z - lastBlockProps.z,
-            };
-    
-            blockPos = {
-                x: activeBlockProps.x + ((activeBlockProps.width - blockGeo.x) / 2),
-                y: activeBlockProps.y,
-                z: activeBlockProps.z + ((activeBlockProps.depth - blockGeo.z) / 2),
-            }
+            newBlockProps = this.calcNewBlockProps(this.state.lastBlock, this.state.activeBlock, false);
         }
 
-        let newBlockProps = {
-            x: blockPos.x,
-            y: blockPos.y,
-            z: blockPos.z,
-            width: blockGeo.x,
-            height: blockGeo.y,
-            depth: blockGeo.z,
-        }
-
-        this.group.remove(this.activeBlock);
-        this.scene.remove(this.activeBlock);
-        // FIXME: Inverter posição do vetor direção
+        this.group.remove(this.state.activeBlock);
+        this.scene.remove(this.state.activeBlock);
         new Block(this, newBlockProps).add();
         new Block(this).add();
         this.setActiveBlock();
 
         this.group.position.y -= 2;
-        this.workingPlane.axis === "x" ? this.workingPlane.axis = "z" : this.workingPlane.axis = "x";
+        this.state.plane.axis === "x" ? this.state.plane.axis = "z" : this.state.plane.axis = "x";
 
-        this.blockState = "ACTIVE";
+        this.state.blockState = "ACTIVE";
     }
 
     setActiveBlock() {
-        this.activeBlock = this.group.children[this.group.children.length - 1];
+        this.state.activeBlock = this.group.children[this.group.children.length - 1];
+    }
+
+    extractBlockProps(block) {
+        return {
+            width: block.geometry.parameters.width,
+            height: block.geometry.parameters.height,
+            depth: block.geometry.parameters.depth,
+            x: block.position.x,
+            y: block.position.y,
+            z: block.position.z 
+        }
+    }
+
+    calcNewBlockProps(lastBlock, activeBlock, positiveSide) {
+        let lastBlockProps = this.extractBlockProps(lastBlock);
+        let activeBlockProps = this.extractBlockProps(activeBlock);
+
+        let calculatedProps = {};
+
+        // Calculate Geometry & Position
+        if(positiveSide) {
+            calculatedProps = {
+                width: lastBlockProps.width - activeBlockProps.x + lastBlockProps.x,
+                height: lastBlockProps.height,
+                depth: lastBlockProps.depth - activeBlockProps.z + lastBlockProps.z,
+            }
+
+            calculatedProps.x = activeBlockProps.x - ((activeBlockProps.width - calculatedProps.width) / 2);
+
+            calculatedProps.y = activeBlockProps.y;
+
+            calculatedProps.z = activeBlockProps.z - ((activeBlockProps.depth - calculatedProps.depth) / 2);
+
+        } else {
+            calculatedProps = {
+                width: lastBlockProps.width + activeBlockProps.x - lastBlockProps.x,
+                height: lastBlockProps.height,
+                depth: lastBlockProps.depth + activeBlockProps.z - lastBlockProps.z,
+            }
+
+            calculatedProps.x = activeBlockProps.x + ((activeBlockProps.width - calculatedProps.width) / 2);
+
+            calculatedProps.y = activeBlockProps.y;
+
+            calculatedProps.z = activeBlockProps.z + ((activeBlockProps.depth - calculatedProps.depth) / 2);
+        }
+
+        return calculatedProps;
     }
 }
 
@@ -186,13 +201,13 @@ class Block {
 
         let lastBlock = this.game.group.children[this.game.group.children.length - 1];
 
-        let workingPlane = this.game.workingPlane;
+        let plane = this.game.state.plane;
 
         if(!props) {
             this.props = {
-                x: workingPlane.axis === "z" ? lastBlock.position.x - workingPlane.length : lastBlock.position.x,
+                x: plane.axis === "z" ? lastBlock.position.x - plane.length : lastBlock.position.x,
                 y: lastBlock.position.y + lastBlock.geometry.parameters.height,
-                z: workingPlane.axis === "x" ? lastBlock.position.z - workingPlane.length : lastBlock.position.z,
+                z: plane.axis === "x" ? lastBlock.position.z - plane.length : lastBlock.position.z,
                 width: lastBlock.geometry.parameters.width,
                 height: lastBlock.geometry.parameters.height,
                 depth: lastBlock.geometry.parameters.depth
