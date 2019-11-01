@@ -163,10 +163,14 @@ export class Game {
 
         this.group.remove(this.activeBlock);
         this.scene.remove(this.activeBlock);
-        // TODO: Falta criar umm novo bloco na faixa assima
+        // FIXME: Inverter posição do vetor direção
         new Block(this, newBlockProps).add();
         new Block(this).add();
         this.setActiveBlock();
+
+        this.group.position.y -= 2;
+        this.workingPlane.axis === "x" ? this.workingPlane.axis = "z" : this.workingPlane.axis = "x";
+
         this.blockState = "ACTIVE";
     }
 
