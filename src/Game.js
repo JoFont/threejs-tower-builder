@@ -39,10 +39,9 @@ export class Game {
 			-d,
 			-100,
 			1000
-		);
-		this.camera.position.x = 2;
-		this.camera.position.y = 2;
-		this.camera.position.z = 2;
+        );
+        
+        this.camera.position.set(2, 2, 2);
 		this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 		this.scene.add(this.camera);
 
@@ -62,7 +61,7 @@ export class Game {
         this.group = new THREE.Group();
         this.scene.add(this.group);
 
-		this.currentBlock = {};
+		this.activeBlock = {};
 		this.workingPlane = {
 			length: 20,
 			axis: "z",
@@ -82,25 +81,129 @@ export class Game {
 			depth: 10
 		};
 
-		new Block(this, props).place();
-	}
+        let props2 = {
+            x: 0,
+			y: 2,
+			z: 0,
+			width: 10,
+			height: 2,
+			depth: 10
+        }
+
+        new Block(this, props).add();
+        new Block(this, props2).add();
+        this.setActiveBlock();
+	}   
 
 	start() {
 		this.renderer.render(this.scene, this.camera);
-	}
+    }
+    
+    placeBlock() {
+
+        this.blockState = "PLACING";
+
+        let lastBlock = this.group.children[this.group.children.length - 2];
+
+        let lastBlockProps = {
+            width: lastBlock.geometry.parameters.width,
+            height: lastBlock.geometry.parameters.height,
+            depth: lastBlock.geometry.parameters.depth,
+            x: lastBlock.position.x,
+            y: lastBlock.position.y,
+            z: lastBlock.position.z 
+        };
+
+        let activeBlockProps = {
+            width: this.activeBlock.geometry.parameters.width,
+            height: this.activeBlock.geometry.parameters.height,
+            depth: this.activeBlock.geometry.parameters.depth,
+            x: this.activeBlock.position.x,
+            y: this.activeBlock.position.y,
+            z: this.activeBlock.position.z
+        };
+
+        let blockGeo = {};
+        let blockPos = {};
+        
+        if (this.workingPlane.axis === "x" && activeBlockProps.x - lastBlockProps.x > 0 || this.workingPlane.axis === "z" && activeBlockProps.z - lastBlockProps.z > 0) {
+            blockGeo = {
+                x: lastBlockProps.width - activeBlockProps.x + lastBlockProps.x,
+                y: lastBlockProps.height,
+                z: lastBlockProps.depth - activeBlockProps.z + lastBlockProps.z,
+            };
+    
+            blockPos = {
+                x: activeBlockProps.x - ((activeBlockProps.width - blockGeo.x) / 2),
+                y: activeBlockProps.y,
+                z: activeBlockProps.z - ((activeBlockProps.depth - blockGeo.z) / 2)
+            }
+        } else {
+            blockGeo = {
+                x: lastBlockProps.width + activeBlockProps.x - lastBlockProps.x,
+                y: lastBlockProps.height,
+                z: lastBlockProps.depth + activeBlockProps.z - lastBlockProps.z,
+            };
+    
+            blockPos = {
+                x: activeBlockProps.x + ((activeBlockProps.width - blockGeo.x) / 2),
+                y: activeBlockProps.y,
+                z: activeBlockProps.z + ((activeBlockProps.depth - blockGeo.z) / 2),
+            }
+        }
+
+        let newBlockProps = {
+            x: blockPos.x,
+            y: blockPos.y,
+            z: blockPos.z,
+            width: blockGeo.x,
+            height: blockGeo.y,
+            depth: blockGeo.z,
+        }
+
+        this.group.remove(this.activeBlock);
+        this.scene.remove(this.activeBlock);
+        // TODO: Falta criar umm novo bloco na faixa assima
+        new Block(this, newBlockProps).add();
+        new Block(this).add();
+
+        this.blockState = "ACTIVE";
+    }
+
+    setActiveBlock() {
+        this.activeBlock = this.group.children[this.group.children.length - 1];
+    }
 }
 
 class Block {
 	constructor(game, props) {
-		this.game = game;
-		this.props = {
-			x: props.x || 0,
-			y: props.y || 0,
-			z: props.z || 0,
-			width: props.width || 10,
-			height: props.height || 2,
-			depth: props.depth || 10
-		};
+        this.game = game;
+        this.props;
+
+        let lastBlock = this.game.group.children[this.game.group.children.length - 1];
+
+        let workingPlane = this.game.workingPlane;
+
+        if(!props) {
+            this.props = {
+                x: workingPlane.axis === "z" ? lastBlock.position.x - workingPlane.length : lastBlock.position.x,
+                y: lastBlock.position.y + lastBlock.geometry.parameters.height,
+                z: workingPlane.axis === "x" ? lastBlock.position.z - workingPlane.length : lastBlock.position.z,
+                width: lastBlock.geometry.parameters.width,
+                height: lastBlock.geometry.parameters.height,
+                depth: lastBlock.geometry.parameters.depth
+            }
+        } else {
+            this.props = {
+                x: props.x || 0,
+                y: props.y || 0,
+                z: props.z || 0,
+                width: props.width || 10,
+                height: props.height || 2,
+                depth: props.depth || 10
+            };
+        }
+		
 		this.geometry = new THREE.BoxGeometry(
 			this.props.width,
 			this.props.height,
@@ -114,7 +217,7 @@ class Block {
 		this.block.position.set(this.props.x, this.props.y, this.props.z);
 	}
 
-	place() {
+	add() {
         this.game.group.add(this.block);
 	}
 }
