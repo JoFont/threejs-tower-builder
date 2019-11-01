@@ -166,7 +166,7 @@ export class Game {
         // TODO: Falta criar umm novo bloco na faixa assima
         new Block(this, newBlockProps).add();
         new Block(this).add();
-
+        this.setActiveBlock();
         this.blockState = "ACTIVE";
     }
 
