@@ -1,5 +1,5 @@
 import { Game } from "./Game/Game";
-
+import { Ui } from "./Ui/Ui";
 
 let windowProps = {
 	width: window.innerWidth,
@@ -7,37 +7,54 @@ let windowProps = {
 	pixelRatio: window.pixelRatio,
 }
 
-const testGame = new Game("single", windowProps);
-testGame.stage();
-// testGame.start();
 
-document.addEventListener('keydown', e =>  {
-    if(e.keyCode === 32) {
-		testGame.placeBlock();
-		
-    }
+document.addEventListener("click", e => {
+	if(e.target.id === "main-menu-start-button") {
+		Ui.switchView("home-screen", "select-game-screen");
+	} else if(e.target.id === "back-to-home-btn") {
+		Ui.switchView("select-game-screen", "home-screen");
+	} else if(e.target.id === "start-single-player") {
+		Ui.hideUI("select-game-screen");
+		startGame("single-player");
+	}
 });
 
 
-function loop() {
-	requestAnimationFrame(loop);
+const startGame = type => {
+	const game = new Game(type, windowProps);
+	game.stage();
 
-	// console.log(testGame.blockState);
+	window.addEventListener("resize",() => {
+		game.updateSize();
+	}, false);
 
-	if (testGame.state.blockState === "ACTIVE") {	
-		// Move Block
-		let speed = 0.2;
-
-		if (testGame.state.plane.forward === true && testGame.state.activeBlock.position[testGame.state.plane.axis] + speed < testGame.state.plane.length) {
-			testGame.state.activeBlock.position[testGame.state.plane.axis] += speed;
-		} else if (testGame.state.plane.forward === false && testGame.state.activeBlock.position[testGame.state.plane.axis] + speed > - testGame.state.plane.length) {
-			testGame.state.activeBlock.position[testGame.state.plane.axis] -= speed;
-		} else {
-			testGame.state.plane.forward = !testGame.state.plane.forward;
+	document.addEventListener('keydown', e =>  {
+		if(e.keyCode === 32) {
+			game.placeBlock();
 		}
-	}
+	});
 
-	testGame.render();
+	function loop() {
+		requestAnimationFrame(loop);
+		if (game.state.blockState === "ACTIVE") {	
+			// Move Block
+			let speed = 0.2;
+	
+			if (game.state.plane.forward === true && game.state.activeBlock.position[game.state.plane.axis] + speed < game.state.plane.length) {
+				game.state.activeBlock.position[game.state.plane.axis] += speed;
+			} else if (game.state.plane.forward === false && game.state.activeBlock.position[game.state.plane.axis] + speed > - game.state.plane.length) {
+				game.state.activeBlock.position[game.state.plane.axis] -= speed;
+			} else {
+				game.state.plane.forward = !game.state.plane.forward;
+			}
+		}
+	
+		game.render();
+	}
+	loop();
 }
 
-loop();
+
+
+
+

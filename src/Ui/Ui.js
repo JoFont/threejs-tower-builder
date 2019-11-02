@@ -6,10 +6,22 @@ export class Ui {
         this.$container.setAttribute("id", container);
 
         this.$parent = document.getElementById(parent);
+    }
+
+    render() {
         this.$parent.appendChild(this.$container);
     }
 
     changeView(content) {
         this.$container.innerHTML = content;
+    }
+
+    static switchView(hide, show) {
+        document.getElementById(hide).style.display = "none";
+        document.getElementById(show).style.display = "block";
+    }
+
+    static hideUI(ui) {
+        document.getElementById(ui).style.display = "none";
     }
 }

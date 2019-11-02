@@ -14,7 +14,7 @@
 	</head>
 	<body>
 		<div id="ui">
-			<div class="container-fluid flex-column w-75 mt-5">
+			<div id="home-screen" class="container-fluid flex-column w-75 mt-5">
 				<div class="row">
 					<h1 class="display-4 mx-auto">Three js - Tower Builder</h1>
 				</div>
@@ -22,7 +22,7 @@
 					<h3 class="mx-auto">by Diogo Marques</h3>
 				</div>
 				<div class="row justify-content-center mt-5">
-					<button type="button" class="btn btn-success btn-lg">Start Game</button>
+					<button id="main-menu-start-button" type="button" class="btn btn-success btn-lg px-5">Play</button>
 				</div>
 				<div class="row justify-content-center mt-3">
 					<button type="button" class="btn btn-primary m-2">Leaderboard</button>
@@ -35,13 +35,34 @@
 				</div>
 			</div>
 
+			<div id="select-game-screen" class="container-fluid flex-column w-75 mt-5" style="display: none;">
+				<div class="row">
+					<h1 class="display-4 mx-auto">Three js - Tower Builder</h1>
+				</div>
+				<div class="row">
+					<h3 class="mx-auto">by Diogo Marques</h3>
+				</div>
+				<div class="row mt-5">
+					<h4 class="mx-auto">Select Game Mode</h4>
+				</div>
+				<div class="row justify-content-center mt-3">
+					<button id="start-single-player" type="button" class="btn btn-primary m-2">Single Player</button>
+					<button type="button" class="btn btn-primary m-2 disabled">Multiplayer</button>
+				</div>
+				<div class="row justify-content-center">
+					<button id="back-to-home-btn" type="button" class="btn btn-success m-2 btn-sm">
+						<i class="fas fa-arrow-left mr-2"></i>
+						Back
+					</button>
+				</div>
+			</div>
+			
 			<!-- <div class="score-board">
 				<h1>SCORE</h1>
 				<h2 id="score">0</h2>
 			</div> -->
 		</div>
 		<div id="game-container"">
-			<div id="game"></div>
 		</div>
 		<script src='bundle.js'></script>
 	</body>

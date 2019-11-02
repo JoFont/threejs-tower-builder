@@ -14,6 +14,13 @@ export class Game {
         };
         
         this.id = Utils.generateID();
+        // DOM
+        this.$parentNode = document.getElementById("game-container");
+        this.$domNode = document.createElement("div");
+        this.$domNode.setAttribute("id", this.id);
+        this.$parentNode.appendChild(this.$domNode);
+
+        this.ui = new GameUi("game-ui", this.id, this);
 
         // Scene
         this.scene = new THREE.Scene();
@@ -24,7 +31,6 @@ export class Game {
 		this.renderer.setPixelRatio(this.props.pixelRatio);
 		this.renderer.setSize(this.props.windowWidth, this.props.windowHeight);
 		this.renderer.setClearColor("#D0CBC7", 1);
-		this.domNode = document.getElementById("game");
 		
 		// Camera
 		let aspectRatio = this.props.windowWidth / this.props.windowHeight;
@@ -65,12 +71,12 @@ export class Game {
                 h: 70,
                 s: 100,
                 l: 78,
-            }
+            },
+            score: 0
         };
 
         this.score = 0;
-        this.uiContainer = "game-ui";
-        this.ui = new GameUi(this.uiContainer, "game", this);
+        
 	}
 
 	stage() {
@@ -109,7 +115,9 @@ export class Game {
         firstBlockProps.pos.y = 2;
         firstBlockProps.color = this.state.activeColor;
 
-        this.domNode.appendChild(this.renderer.domElement);
+        this.ui.render();
+        this.$domNode.appendChild(this.renderer.domElement);
+        
         this.scene.add(this.camera);
         this.scene.add(this.light);
         this.scene.add(this.softLight);
@@ -120,6 +128,18 @@ export class Game {
         new Block(this, firstBlockProps).add();
         this.setActiveBlock();
 	}   
+
+    // TODO: FIX THIS FOR SIDE BY SIDE GAME
+    updateSize() {
+        let viewSize = 30;
+        
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.camera.left = window.innerWidth / -viewSize;
+        this.camera.right = window.innerWidth / viewSize;
+        this.camera.top = window.innerHeight / viewSize;
+        this.camera.bottom = window.innerHeight / -viewSize;
+        this.camera.updateProjectionMatrix();
+    }
 
 	render() {
 		this.renderer.render(this.scene, this.camera);
@@ -152,7 +172,7 @@ export class Game {
             this.group.remove(this.state.activeBlock);
             this.scene.remove(this.state.activeBlock);
 
-            this.updateScore(1);
+            // this.updateScore(1);
             // Place Block
             new Block(this, placeBlockProps).add();
 
