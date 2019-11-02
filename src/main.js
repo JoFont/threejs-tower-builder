@@ -8,16 +8,16 @@ let windowProps = {
 }
 
 
-document.addEventListener("click", e => {
-	if(e.target.id === "main-menu-start-button") {
-		Ui.switchView("home-screen", "select-game-screen");
-	} else if(e.target.id === "back-to-home-btn") {
-		Ui.switchView("select-game-screen", "home-screen");
-	} else if(e.target.id === "start-single-player") {
-		Ui.hideUI("select-game-screen");
-		startGame("single-player");
-	}
-});
+// document.addEventListener("click", e => {
+// 	if(e.target.id === "main-menu-start-button") {
+// 		Ui.switchView("home-screen", "select-game-screen");
+// 	} else if(e.target.id === "back-to-home-btn") {
+// 		Ui.switchView("select-game-screen", "home-screen");
+// 	} else if(e.target.id === "start-single-player") {
+// 		Ui.hideUI("select-game-screen");
+// 		startGame("single-player");
+// 	}
+// });
 
 
 const startGame = type => {
@@ -58,3 +58,4 @@ const startGame = type => {
 
 
 
+startGame("single-player");

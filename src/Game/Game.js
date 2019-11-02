@@ -53,7 +53,7 @@ export class Game {
 		this.softLight = new THREE.AmbientLight(0xffffff, 0.4);
 
 		// Display Axes
-		this.axesHelper = new THREE.AxesHelper(100);
+		// this.axesHelper = new THREE.AxesHelper(100);
 
 		// Regarding Blocks
         this.group = new THREE.Group();
@@ -74,9 +74,6 @@ export class Game {
             },
             score: 0
         };
-
-        this.score = 0;
-        
 	}
 
 	stage() {
@@ -116,6 +113,7 @@ export class Game {
         firstBlockProps.color = this.state.activeColor;
 
         this.ui.render();
+        this.ui.renderScore();
         this.$domNode.appendChild(this.renderer.domElement);
         
         this.scene.add(this.camera);
@@ -172,7 +170,7 @@ export class Game {
             this.group.remove(this.state.activeBlock);
             this.scene.remove(this.state.activeBlock);
 
-            // this.updateScore(1);
+            this.updateScore(1);
             // Place Block
             new Block(this, placeBlockProps).add();
 
@@ -209,8 +207,8 @@ export class Game {
     }
 
     updateScore(value) {
-        this.score += value;
-        this.ui.updateScore();
+        this.state.score += value;
+        this.ui.updateUiScore(this.state.score);
     }
 
     extractBlockProps(block) {
