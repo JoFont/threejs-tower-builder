@@ -99,7 +99,7 @@ export class Game {
         let firstBlockProps = {
             pos: {
                 x: 0,
-                y: 0,
+                y: 2,
                 z: 0
             },
             geo: {
@@ -109,7 +109,6 @@ export class Game {
             }
         };
         
-        firstBlockProps.pos.y = 2;
         firstBlockProps.color = this.state.activeColor;
 
         this.ui.render();
@@ -153,12 +152,18 @@ export class Game {
         let activeBlockProps = this.extractBlockProps(this.state.activeBlock);
 
         let placeBlockProps = {};
+        let remainingBlock = {}
         
         if (this.state.plane.axis === "x" && activeBlockProps.pos.x - lastBlockProps.pos.x > 0 || this.state.plane.axis === "z" && activeBlockProps.pos.z - lastBlockProps.pos.z > 0) {
             placeBlockProps = this.calcPlacedBlockProps(lastBlockProps, activeBlockProps, true);
+            remainingBlock = this.calcRemainingBlockProps(lastBlockProps, placeBlockProps, true);
+
         } else {
             placeBlockProps = this.calcPlacedBlockProps(lastBlockProps, activeBlockProps, false);
+            remainingBlock = this.calcRemainingBlockProps(lastBlockProps, placeBlockProps, false);
         }
+
+        console.log(remainingBlock)
 
         if(placeBlockProps.geo.width <= 0 || placeBlockProps.geo.depth <= 0) {
             console.log("lost")
@@ -173,6 +178,7 @@ export class Game {
             this.updateScore(1);
             // Place Block
             new Block(this, placeBlockProps).add();
+            new Block(this, remainingBlock).addRemainder();
 
             // Create new Block
             this.createNewLayer();
@@ -254,6 +260,39 @@ export class Game {
                 x: active.pos.x + ((active.geo.width - calculatedProps.geo.width) / 2),
                 y: active.pos.y,
                 z: active.pos.z + ((active.geo.depth - calculatedProps.geo.depth) / 2)
+            }
+        }
+
+        calculatedProps.color = {...this.state.activeColor}
+
+        return calculatedProps;
+    }
+
+    calcRemainingBlockProps(last, chopped, positiveSide) {
+        let calculatedProps = {};
+
+        let subtractedGeo = {
+            width: last.geo.width - chopped.geo.width,
+            depth: last.geo.depth - chopped.geo.depth
+        }
+
+        calculatedProps.geo = {
+            width: subtractedGeo.width === 0 ? last.geo.width : subtractedGeo.width,
+            height: last.geo.height,
+            depth: subtractedGeo.depth === 0 ? last.geo.depth : subtractedGeo.depth,
+        }
+
+        if(positiveSide) {
+            calculatedProps.pos = {
+                x: subtractedGeo.width === 0 ? chopped.pos.x : chopped.pos.x + ((chopped.geo.width +  calculatedProps.geo.width )/ 2),
+                y: 2, 
+                z: subtractedGeo.depth === 0 ? chopped.pos.z : chopped.pos.z + ((chopped.geo.depth +  calculatedProps.geo.depth )/ 2)
+            } 
+        } else {  
+            calculatedProps.pos = {
+                x: subtractedGeo.width === 0 ? chopped.pos.x : chopped.pos.x - ((chopped.geo.width +  calculatedProps.geo.width )/ 2),
+                y: 2, 
+                z: subtractedGeo.depth === 0 ? chopped.pos.z : chopped.pos.z - ((chopped.geo.depth +  calculatedProps.geo.depth )/ 2)
             }
         }
 

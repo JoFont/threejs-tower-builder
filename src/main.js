@@ -58,4 +58,4 @@ const startGame = type => {
 
 
 
-startGame("single-player");
+startGame();

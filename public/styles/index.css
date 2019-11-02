@@ -1,6 +1,12 @@
+@import "./fonts/Roobert.css";
+
 body {
     margin: 0;
     overflow: hidden;
+}
+
+* {
+    font-family: 'Roobert', Tahoma, Geneva, Verdana, sans-serif !important; 
 }
 
 #ui {
@@ -15,6 +21,4 @@ body {
     position: absolute;
     left: 0;
     top: 0;
-    /* display: flex;
-    justify-content: center; */
 }
