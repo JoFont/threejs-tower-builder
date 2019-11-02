@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { TweenMax, Power2, TimelineLite } from "gsap/all"; 
+import { TweenMax } from "gsap/all"; 
 
 
 export class Block {
@@ -16,9 +16,9 @@ export class Block {
                 depth: lastBlock.geometry.parameters.depth
             },
             pos: {
-                x: plane.axis === "z" ? lastBlock.position.x - plane.length : lastBlock.position.x,
+                x: plane.axis === "z" ? - plane.length : lastBlock.position.x,
                 y: lastBlock.position.y + lastBlock.geometry.parameters.height,
-                z: plane.axis === "x" ? lastBlock.position.z - plane.length : lastBlock.position.z,
+                z: plane.axis === "x" ? - plane.length : lastBlock.position.z,
             },
             color: {...this.game.state.activeColor}
         };
@@ -47,11 +47,11 @@ export class Block {
         let translate = this.block.position[animationDirection] * 3;
 
         if(animationDirection === "z") {
-            TweenMax.to(this.block.position, 2, {z:translate, y:-50});
-            TweenMax.to(this.block.rotation, 2, {x:6, onComplete:deleteBlock});
+            TweenMax.to(this.block.position, 2, {z:translate, y:-50, ease: Power1.easeIn});
+            TweenMax.to(this.block.rotation, 2, {x:6, ease: Power1.easeIn, onComplete:deleteBlock});
         } else {
-            TweenMax.to(this.block.position, 2, {x:translate, y:-50});
-            TweenMax.to(this.block.rotation, 2, {z:-6, onComplete:deleteBlock});
+            TweenMax.to(this.block.position, 2, {x:translate, y:-50, ease: Power1.easeIn});
+            TweenMax.to(this.block.rotation, 2, {z:-6, ease: Power1.easeIn, onComplete:deleteBlock});
         }
         
 

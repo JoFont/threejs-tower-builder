@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { TweenMax, Expo } from "gsap/all"; 
 import { Utils } from "../Utils/Utils";
 import { Block } from "./components/Block";
 import { GameUi } from "./components/GameUi";
@@ -62,7 +63,7 @@ export class Game {
             activeBlock: {},
             lastBlock: {},
             plane: {
-                length: 20,
+                length: 15,
                 axis: "z",
                 forward: true
             },
@@ -72,7 +73,8 @@ export class Game {
                 s: 100,
                 l: 78,
             },
-            score: 0
+            score: 0,
+            speed: 0.2
         };
 	}
 
@@ -100,7 +102,7 @@ export class Game {
             pos: {
                 x: 0,
                 y: 2,
-                z: 0
+                z: -15
             },
             geo: {
                 width: 10,
@@ -177,20 +179,34 @@ export class Game {
 
             this.updateScore(1);
             // Place Block
+            this.state.speed += 0.01;
             new Block(this, placeBlockProps).add();
             new Block(this, remainingBlock).addRemainder();
-
             // Create new Block
-            this.createNewLayer();
-        }
+            const createNewLayerProxy = () => {
+                this.createNewLayer();
+            };
+
+            createNewLayerProxy.bind(this);
+
+            console.log(0.5 * this.state.speed);
+
+            let newGroupPos = this.group.position.y - 2;
+            TweenMax.to(this.group.position, 2 * this.state.speed, {y: newGroupPos, ease: Expo.easeInOut, onComplete:createNewLayerProxy});
+        } 
+    }
+
+    log() {
+        console.log("OLHHHA")
     }
 
     createNewLayer() {
+        
         this.incrementHue();
         new Block(this).add();
         this.setActiveBlock();
 
-        this.group.position.y -= 2;
+        // this.group.position.y -= 2;
         this.switchPlaneAxis();
 
         this.setBlockState("ACTIVE");
@@ -277,22 +293,22 @@ export class Game {
         }
 
         calculatedProps.geo = {
-            width: subtractedGeo.width === 0 ? last.geo.width : subtractedGeo.width,
+            width: subtractedGeo.width <= 0 ? last.geo.width : subtractedGeo.width,
             height: last.geo.height,
-            depth: subtractedGeo.depth === 0 ? last.geo.depth : subtractedGeo.depth,
+            depth: subtractedGeo.depth <= 0 ? last.geo.depth : subtractedGeo.depth,
         }
 
         if(positiveSide) {
             calculatedProps.pos = {
-                x: subtractedGeo.width === 0 ? chopped.pos.x : chopped.pos.x + ((chopped.geo.width +  calculatedProps.geo.width )/ 2),
+                x: subtractedGeo.width <= 0 ? chopped.pos.x : chopped.pos.x + ((chopped.geo.width +  calculatedProps.geo.width )/ 2),
                 y: 2, 
-                z: subtractedGeo.depth === 0 ? chopped.pos.z : chopped.pos.z + ((chopped.geo.depth +  calculatedProps.geo.depth )/ 2)
+                z: subtractedGeo.depth <= 0 ? chopped.pos.z : chopped.pos.z + ((chopped.geo.depth +  calculatedProps.geo.depth )/ 2)
             } 
         } else {  
             calculatedProps.pos = {
-                x: subtractedGeo.width === 0 ? chopped.pos.x : chopped.pos.x - ((chopped.geo.width +  calculatedProps.geo.width )/ 2),
+                x: subtractedGeo.width <= 0 ? chopped.pos.x : chopped.pos.x - ((chopped.geo.width +  calculatedProps.geo.width )/ 2),
                 y: 2, 
-                z: subtractedGeo.depth === 0 ? chopped.pos.z : chopped.pos.z - ((chopped.geo.depth +  calculatedProps.geo.depth )/ 2)
+                z: subtractedGeo.depth <= 0 ? chopped.pos.z : chopped.pos.z - ((chopped.geo.depth +  calculatedProps.geo.depth )/ 2)
             }
         }
 

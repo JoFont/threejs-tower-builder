@@ -38,7 +38,7 @@ const startGame = type => {
 		requestAnimationFrame(loop);
 		if (game.state.blockState === "ACTIVE") {	
 			// Move Block
-			let speed = 0.2;
+			let speed = game.state.speed;
 	
 			if (game.state.plane.forward === true && game.state.activeBlock.position[game.state.plane.axis] + speed < game.state.plane.length) {
 				game.state.activeBlock.position[game.state.plane.axis] += speed;
