@@ -6,17 +6,42 @@
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<title>Three js - Tower Builder</title>
 
+		<link rel="stylesheet" href="styles/bootstrap/bootstrap.min.css">
+		<link rel="stylesheet" href="styles/bootstrap/shards.min.css">
+
 		<link rel="stylesheet" href="./styles/index.css">
+		<script src="https://kit.fontawesome.com/e2db4dc1d7.js" crossorigin="anonymous"></script>
 	</head>
 	<body>
-		<div id="container">
-			<div id="game"></div>
-		</div>
-		<div class="ui">
-			<div class="score-board">
+		<div id="ui">
+			<div class="container-fluid flex-column w-75 mt-5">
+				<div class="row">
+					<h1 class="display-4 mx-auto">Three js - Tower Builder</h1>
+				</div>
+				<div class="row">
+					<h3 class="mx-auto">by Diogo Marques</h3>
+				</div>
+				<div class="row justify-content-center mt-5">
+					<button type="button" class="btn btn-success btn-lg">Start Game</button>
+				</div>
+				<div class="row justify-content-center mt-3">
+					<button type="button" class="btn btn-primary m-2">Leaderboard</button>
+				</div>
+				<div class="row justify-content-center">
+					<button type="button" class="btn btn-light m-2 btn-sm">
+						<i class="fab fa-github mr-2"></i>
+						GitHub
+					</button>
+				</div>
+			</div>
+
+			<!-- <div class="score-board">
 				<h1>SCORE</h1>
 				<h2 id="score">0</h2>
-			</div>
+			</div> -->
+		</div>
+		<div id="game-container"">
+			<div id="game"></div>
 		</div>
 		<script src='bundle.js'></script>
 	</body>

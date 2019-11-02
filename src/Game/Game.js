@@ -1,6 +1,7 @@
 import * as THREE from "three";
+import { Utils } from "../Utils/Utils";
 import { Block } from "./components/Block";
-import { Ui } from "./components/Ui";
+import { GameUi } from "./components/GameUi";
 
 
 export class Game {
@@ -10,7 +11,9 @@ export class Game {
 			windowWidth: props.width,
 			windowHeight: props.height,
 			windowPixelRatio: props.pixelRatio
-		};
+        };
+        
+        this.id = Utils.generateID();
 
         // Scene
         this.scene = new THREE.Scene();
@@ -66,7 +69,8 @@ export class Game {
         };
 
         this.score = 0;
-        this.ui = new Ui(this);
+        this.uiContainer = "game-ui";
+        this.ui = new GameUi(this.uiContainer, "game", this);
 	}
 
 	stage() {

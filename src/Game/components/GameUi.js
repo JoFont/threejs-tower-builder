@@ -1,7 +1,8 @@
+import { Ui } from "../../Ui/Ui";
 
-
-export class Ui {
-    constructor(game) {
+export class GameUi extends Ui {
+    constructor(container, parent, game) {
+        super(container, parent);
         this.game = game;
     }
 
@@ -9,4 +10,5 @@ export class Ui {
         let $score = document.getElementById("score");
         $score.textContent = this.game.score;
     }
+
 }

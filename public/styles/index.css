@@ -3,7 +3,7 @@ body {
     overflow: hidden;
 }
 
-.ui {
+#ui {
     position: absolute;
     left: 0;
     top: 0;
