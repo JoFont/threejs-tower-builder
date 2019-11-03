@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { TweenMax } from "gsap/all"; 
-import { Utils } from "../Utils/Utils";
+import { Utils } from "src/Utils/Utils";
 import { Block } from "./components/Block";
 import { GameUi } from "./components/GameUi";
 
