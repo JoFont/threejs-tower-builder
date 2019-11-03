@@ -8,18 +8,6 @@ let windowProps = {
 }
 
 
-// document.addEventListener("click", e => {
-// 	if(e.target.id === "main-menu-start-button") {
-// 		Ui.switchView("home-screen", "select-game-screen");
-// 	} else if(e.target.id === "back-to-home-btn") {
-// 		Ui.switchView("select-game-screen", "home-screen");
-// 	} else if(e.target.id === "start-single-player") {
-// 		Ui.hideUI("select-game-screen");
-// 		startGame("single-player");
-// 	}
-// });
-
-
 const startGame = type => {
 	const game = new Game(type, windowProps);
 	game.stage();
@@ -56,6 +44,42 @@ const startGame = type => {
 
 
 
+let mode = "dev";
+
+if(mode !== "dev") {
+	document.addEventListener("click", e => {
+		if(e.target.id === "main-menu-start-button") {
+			Ui.switchView("home-screen", "select-game-screen");
+		} else if(e.target.id === "back-to-home-btn") {
+			Ui.switchView("select-game-screen", "home-screen");
+		} else if(e.target.id === "start-single-player") {
+			Ui.hideUI("select-game-screen");
+			startGame("single-player");
+		}
+	});
+} else {
+	Ui.hideUI("ui");
+	startGame("single-player");
+}
 
 
-startGame();
+// document.addEventListener('DOMContentLoaded', function() {
+// 	// // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+// 	// // The Firebase SDK is initialized and available here!
+// 	//
+// 	// firebase.auth().onAuthStateChanged(user => { });
+// 	// firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+// 	// firebase.messaging().requestPermission().then(() => { });
+// 	// firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+// 	//
+// 	// // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+// 	try {
+// 	  let app = firebase.app();
+// 	  let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
+// 	  document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
+// 	} catch (e) {
+// 	  console.error(e);
+// 	  document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
+// 	}
+//   });

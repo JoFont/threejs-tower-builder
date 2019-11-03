@@ -12,10 +12,6 @@ export class Ui {
         this.$parent.appendChild(this.$container);
     }
 
-    changeView(content) {
-        this.$container.innerHTML = content;
-    }
-
     static switchView(hide, show) {
         document.getElementById(hide).style.display = "none";
         document.getElementById(show).style.display = "block";
@@ -23,5 +19,9 @@ export class Ui {
 
     static hideUI(ui) {
         document.getElementById(ui).style.display = "none";
+    }
+
+    static showUI(ui) {
+        document.getElementById(ui).style.display = "block";
     }
 }

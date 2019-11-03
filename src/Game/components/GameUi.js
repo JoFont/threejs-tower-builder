@@ -39,5 +39,15 @@ export class GameUi extends Ui {
         function log() {
             console.log("Anim Comp")
         }
+
+        let lossUI = document.createElement("div");
+        lossUI.setAttribute("id", "game-lost");
+        lossUI.setAttribute("class", "row");
+
+        lossUI.innerHTML = `
+            <h3 class="mx-auto">You lost</h3>
+        `;
+
+        this.$container.appendChild(lossUI);
     }
 }
