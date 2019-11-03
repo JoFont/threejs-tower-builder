@@ -1,4 +1,4 @@
-
+import { TweenMax, Expo, CSSPlugin } from "gsap/all";
 
 export class Ui {
     constructor(container, parent) {

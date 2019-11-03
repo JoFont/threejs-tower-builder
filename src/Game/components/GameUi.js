@@ -1,15 +1,18 @@
 import { Ui } from "../../Ui/Ui";
+import { TweenMax, CSSPlugin, AttrPlugin } from "gsap/all";
+
+const plugins = [CSSPlugin, AttrPlugin];
 
 export class GameUi extends Ui {
     constructor(container, parent, game) {
         super(container, parent);
         this.game = game;
 
-        this.$container.setAttribute("style", `width: ${this.game.props.windowWidth};`);
+        this.$container.setAttribute("style", `width: ${this.game.props.windowWidth}px;`);
         this.$container.classList.add("container-fluid", "flex-column", "w-100", "mt-5", container)
         
 
-        this.score;
+        this.$score;
     }
 
     renderScore() {
@@ -27,4 +30,14 @@ export class GameUi extends Ui {
         this.$score.innerHTML= `<h1 class="display-2 mx-auto">${value}</h1>`;
     }
 
+    renderLossUi() {
+        // let test = document.getElementById("game-score"); 
+
+        TweenMax.to(".game-ui", 1, {left: 90, onComplete:log});
+
+ 
+        function log() {
+            console.log("Anim Comp")
+        }
+    }
 }

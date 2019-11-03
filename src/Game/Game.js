@@ -314,7 +314,9 @@ export class Game {
     }
 
     handleGameLoss() {
-
+        this.ui.renderLossUi();
+        console.log(this.ui);
+        console.log(this.state.lastBlock);
     }
 }
 

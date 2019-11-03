@@ -22,7 +22,7 @@ export class Block {
             },
             color: {...this.game.state.activeColor}
         };
-        
+
         this.geometry = new THREE.BoxGeometry(this.props.geo.width, this.props.geo.height, this.props.geo.depth);
 		this.material = new THREE.MeshToonMaterial({
 			color: `hsl(${this.props.color.h}, ${this.props.color.s}%, ${this.props.color.l}%)`,
@@ -59,10 +59,10 @@ export class Block {
         removeMethodProxy.bind(this);
 
         if(animationDirection === "z") {
-            TweenMax.to(this.block.position, 2, {z:translate, y:-50, ease: Power1.easeIn});
+            TweenMax.to(this.block.position, 2, {z:translate, y:-60, ease: Power1.easeIn});
             TweenMax.to(this.block.rotation, 2, {x:rotation, ease: Power1.easeIn, onComplete:removeMethodProxy});
         } else {
-            TweenMax.to(this.block.position, 2, {x:translate, y:-50, ease: Power1.easeIn});
+            TweenMax.to(this.block.position, 2, {x:translate, y:-60, ease: Power1.easeIn});
             TweenMax.to(this.block.rotation, 2, {z:-rotation, ease: Power1.easeIn, onComplete:removeMethodProxy});
         } 
     }
