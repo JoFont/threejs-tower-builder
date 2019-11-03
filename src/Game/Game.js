@@ -192,12 +192,8 @@ export class Game {
             console.log(0.5 * this.state.speed);
 
             let newGroupPos = this.group.position.y - 2;
-            TweenMax.to(this.group.position, 2 * this.state.speed, {y: newGroupPos, ease: Expo.easeInOut, onComplete:createNewLayerProxy});
+            TweenMax.to(this.group.position, 0.1, {y: newGroupPos, onComplete:createNewLayerProxy});
         } 
-    }
-
-    log() {
-        console.log("OLHHHA")
     }
 
     createNewLayer() {

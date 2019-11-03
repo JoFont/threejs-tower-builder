@@ -22,7 +22,7 @@ export class Block {
             },
             color: {...this.game.state.activeColor}
         };
-        // console.log(this.props);
+        
         this.geometry = new THREE.BoxGeometry(this.props.geo.width, this.props.geo.height, this.props.geo.depth);
 		this.material = new THREE.MeshToonMaterial({
 			color: `hsl(${this.props.color.h}, ${this.props.color.s}%, ${this.props.color.l}%)`,
@@ -33,43 +33,37 @@ export class Block {
 	}
 
 	add() {
-        this.game.group.add(this.block);
-        // console.log(this.geometry);
-        // console.log(this.block);
-        // console.log(this.block.geometry.parameters);
-        
+        this.game.group.add(this.block); 
     }
     
     addRemainder() {
         this.game.scene.add(this.block);
+        this.animateRemainder();
+    }
 
-        let animationDirection = this.game.state.plane.axis;
-        let translate = this.block.position[animationDirection] * 3;
-
-        if(animationDirection === "z") {
-            TweenMax.to(this.block.position, 2, {z:translate, y:-50, ease: Power1.easeIn});
-            TweenMax.to(this.block.rotation, 2, {x:6, ease: Power1.easeIn, onComplete:deleteBlock});
-        } else {
-            TweenMax.to(this.block.position, 2, {x:translate, y:-50, ease: Power1.easeIn});
-            TweenMax.to(this.block.rotation, 2, {z:-6, ease: Power1.easeIn, onComplete:deleteBlock});
-        }
-        
-
-        let block = this.block;
-        let geo = this.geometry;
-        let mat = this.material;
-        let sc = this.game.scene;
-
-        function deleteBlock() {
-            geo.dispose();
-            mat.dispose();
-            sc.remove(block);
-            console.log("DELETED");
-        }
+    remove() {
+        this.geometry.dispose();
+        this.material.dispose();
+        this.game.scene.remove(this.block);
     }
 
     animateRemainder() {
-        
-    }
+        let animationDirection = this.game.state.plane.axis;
+        let translate = this.block.position[animationDirection] * 6;
+        let rotation = Math.sign(this.block.position[animationDirection]) * 6;
 
+        const removeMethodProxy = () => {
+            this.remove();
+        }
+
+        removeMethodProxy.bind(this);
+
+        if(animationDirection === "z") {
+            TweenMax.to(this.block.position, 2, {z:translate, y:-50, ease: Power1.easeIn});
+            TweenMax.to(this.block.rotation, 2, {x:rotation, ease: Power1.easeIn, onComplete:removeMethodProxy});
+        } else {
+            TweenMax.to(this.block.position, 2, {x:translate, y:-50, ease: Power1.easeIn});
+            TweenMax.to(this.block.rotation, 2, {z:-rotation, ease: Power1.easeIn, onComplete:removeMethodProxy});
+        } 
+    }
 }
