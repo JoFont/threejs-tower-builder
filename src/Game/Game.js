@@ -170,6 +170,21 @@ export class Game {
         if(placeBlockProps.geo.width <= 0 || placeBlockProps.geo.depth <= 0) {
             console.log("lost")
             this.handleGameLoss();
+
+            // TODO: This works but needs to be refactored properly
+
+            // this.state.activeBlock.material.dispose();
+            // this.state.activeBlock.geometry.dispose();
+            // this.group.remove(this.state.activeBlock);
+            // this.scene.remove(this.state.activeBlock);
+
+            // activeBlockProps.color = {
+            //     h: 200,
+            //     s: 50,
+            //     l: 80
+            // }
+            // // new Block(this, placeBlockProps).add();
+            // new Block(this, activeBlockProps).addRemainder();
         } else {
             // Dispose of Old Block
             this.state.activeBlock.material.dispose();
