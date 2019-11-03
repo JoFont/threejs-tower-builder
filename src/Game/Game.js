@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import { TweenMax, Expo } from "gsap/all"; 
-import { Utils } from "../Utils/Utils.js";
+import { TweenMax } from "gsap/all"; 
+import { Utils } from "src/Utils/Utils.js";
 import { Block } from "./components/Block";
 import { GameUi } from "./components/GameUi";
 
