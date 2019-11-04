@@ -1,11 +1,14 @@
 import { Game } from "./Game/Game";
 import { Ui } from "./Ui/Ui";
 
+ 
 let windowProps = {
 	width: window.innerWidth,
 	height: window.innerHeight,
 	pixelRatio: window.pixelRatio,
 }
+
+
 
 /*
 	TODO: Rethink the whole ui thing. Ui maybe should be global.
