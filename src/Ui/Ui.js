@@ -1,5 +1,6 @@
 import { TweenMax, Expo, CSSPlugin } from "gsap/all";
 
+
 export class Ui {
     constructor(container, parent) {
         this.$container = document.createElement("div");
@@ -24,4 +25,6 @@ export class Ui {
     static showUI(ui) {
         document.getElementById(ui).style.display = "block";
     }
+
+
 }

@@ -35,7 +35,7 @@ export class GameUi extends Ui {
         lossUI.classList.add("container", "d-flex", "flex-column", "justify-content-center");
 
         lossUI.innerHTML = `
-            <div id="game-lost">
+            <div class="container">
                 <div class="row">
                     <h3 class="mx-auto">You lost</h3>
                 </div>
@@ -50,5 +50,23 @@ export class GameUi extends Ui {
         `;
 
         this.$container.appendChild(lossUI);
+    }
+
+    transOut() {
+        let children = this.$container.childNodes
+
+        return new Promise((resolve, reject) => {
+            let duration; 
+            children.forEach((node, i) => {
+                duration = i * 400;
+    
+                node.style.transition = `all ${duration}ms`;
+                node.style.transform = "translateY(-300px)";
+            });
+
+            setTimeout(() => {
+                resolve(duration);
+            }, duration)
+        });
     }
 }

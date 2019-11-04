@@ -1,6 +1,6 @@
 import { Game } from "./Game/Game";
 import { Ui } from "./Ui/Ui";
-
+import {html, render} from 'lit-html';
  
 let windowProps = {
 	width: window.innerWidth,
@@ -15,10 +15,17 @@ let windowProps = {
 */
 
 
+// // This is a lit-html template function. It returns a lit-html template.
+// const helloTemplate = (name) => html`<div id="FDB">Hello ${name}!</div>`;
+
+// // This renders <div>Hello Steve!</div> to the document body
+// render(helloTemplate('Steve'), document.body);
 
 
-const startGame = type => {
-	const game = new Game(type, windowProps);
+let newGame = new Game("single-player", windowProps);
+
+
+const startGame = game => {
 	game.stage();
 
 	window.addEventListener("resize",() => {
@@ -51,8 +58,6 @@ const startGame = type => {
 	loop();
 }
 
-
-
 let mode = "";
 
 if(mode !== "dev") {
@@ -63,14 +68,20 @@ if(mode !== "dev") {
 			Ui.switchView("select-game-screen", "home-screen");
 		} else if(e.target.id === "start-single-player") {
 			Ui.hideUI("select-game-screen");
-			startGame("single-player");
+			startGame(newGame);
+			
+			// game.start();
 		} else if(e.target.id === "game-restart") {
-			startGame("single-player");
+			newGame.remove().then(response => {
+				newGame = new Game("single-player", windowProps);
+				startGame(newGame);
+			});
+			
 		}
 	});
 } else {
 	Ui.hideUI("ui");
-	startGame("single-player");
+	startGame();
 }
 
 

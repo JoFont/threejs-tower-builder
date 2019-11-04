@@ -79,10 +79,6 @@ export class Game {
         };
 	}
 
-    start() {
-        // TODO: ADD ALL GAME LOGIC HERE
-    }
-
 	stage() {
 		// Compile Static element
 		let baseProps = {
@@ -151,7 +147,6 @@ export class Game {
     
     placeBlock() {
         this.setBlockState("PLACING");
-
         this.state.lastBlock = this.group.children[this.group.children.length - 2];
 
 
@@ -170,22 +165,9 @@ export class Game {
             remainingBlock = this.calcRemainingBlockProps(lastBlockProps, placeBlockProps, false);
         }
 
-        console.log(remainingBlock)
 
         if(placeBlockProps.geo.width <= 0 || placeBlockProps.geo.depth <= 0) {
-            console.log("lost")
-            this.handleGameLoss();
-
-            // TODO: This works but needs to be refactored properly
-
-            this.state.activeBlock.material.dispose();
-            this.state.activeBlock.geometry.dispose();
-            this.group.remove(this.state.activeBlock);
-            this.scene.remove(this.state.activeBlock);
-
-            activeBlockProps.color = this.state.activeColor;
-            // new Block(this, placeBlockProps).add();
-            new Block(this, activeBlockProps).addRemainder();
+            this.handleGameLoss(activeBlockProps);
         } else {
             // Dispose of Old Block
             this.state.activeBlock.material.dispose();
@@ -204,8 +186,6 @@ export class Game {
             };
 
             createNewLayerProxy.bind(this);
-
-            console.log(0.5 * this.state.speed);
 
             let newGroupPos = this.group.position.y - 2;
             TweenMax.to(this.group.position, 0.1, {y: newGroupPos, onComplete:createNewLayerProxy});
@@ -329,11 +309,56 @@ export class Game {
         return calculatedProps;
     }
 
-    handleGameLoss() {
+    handleGameLoss(props) {
         this.state.lost = true;
         this.ui.renderLossUi();
-        console.log(this.ui);
-        console.log(this.state.lastBlock);
+
+        this.removeMesh(this.state.activeBlock);
+
+        props.color = this.state.activeColor;
+        props.pos.y = 30;
+        new Block(this, props).addRemainder();
     }
+
+    removeMesh(mesh) {
+        mesh.material.dispose();
+        mesh.geometry.dispose();
+        this.group.remove(mesh);
+        this.scene.remove(mesh);
+    }
+
+    remove() {
+        let self = this;
+
+        // 
+
+        return new Promise((resolve, reject) => {
+            console.log(self.group);
+            // TweenMax.staggerTo(self.group.children, 10, {"scale.x": 0.1, "scale.z": 0.1}, 1);
+
+            let groupLength = self.group.children.length;
+            let groupPos = self.group.position.y;
+
+            //TODO:  NOT WORKING POROPERLY
+            // TODO: Maybe use stepped easing from gsap
+
+            function increasePos() {
+                groupPos += 2;
+            }
+
+            self.group.children.forEach((child, i) => {
+                TweenMax.to(child.scale, (groupLength / 4) - i, {x: 0.001, z: 0.001});
+
+                TweenMax.to(self.group.position, (groupLength / 4) - i, {y: groupPos, onComplete: increasePos});
+            });
+
+            self.ui.transOut().then(response => {
+                self.scene.dispose();
+                self.$parentNode.removeChild(self.$domNode);
+                resolve(response);
+            });
+        });
+    }
+
 }
 
