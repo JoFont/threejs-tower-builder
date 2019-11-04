@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { TweenMax } from "gsap/all"; 
-import { Utils } from "src/Utils/Utils";
+import { Utils } from "../utils/Utils";
 import { Block } from "./components/Block";
 import { GameUi } from "./components/GameUi";
 
@@ -173,18 +173,14 @@ export class Game {
 
             // TODO: This works but needs to be refactored properly
 
-            // this.state.activeBlock.material.dispose();
-            // this.state.activeBlock.geometry.dispose();
-            // this.group.remove(this.state.activeBlock);
-            // this.scene.remove(this.state.activeBlock);
+            this.state.activeBlock.material.dispose();
+            this.state.activeBlock.geometry.dispose();
+            this.group.remove(this.state.activeBlock);
+            this.scene.remove(this.state.activeBlock);
 
-            // activeBlockProps.color = {
-            //     h: 200,
-            //     s: 50,
-            //     l: 80
-            // }
-            // // new Block(this, placeBlockProps).add();
-            // new Block(this, activeBlockProps).addRemainder();
+            activeBlockProps.color = this.state.activeColor;
+            // new Block(this, placeBlockProps).add();
+            new Block(this, activeBlockProps).addRemainder();
         } else {
             // Dispose of Old Block
             this.state.activeBlock.material.dispose();
