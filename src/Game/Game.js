@@ -74,9 +74,14 @@ export class Game {
                 l: 78,
             },
             score: 0,
-            speed: 0.2
+            speed: 0.2,
+            lost: false
         };
 	}
+
+    start() {
+        // TODO: ADD ALL GAME LOGIC HERE
+    }
 
 	stage() {
 		// Compile Static element
@@ -258,7 +263,8 @@ export class Game {
     calcPlacedBlockProps(last, active, positiveSide) {
         let calculatedProps = {};
         
-        // Calculate Geometry & Position
+        // Calculate Geometry & Position    
+        // TODO: REFACTOR THIS WITH DINAMIC OPERATOR SIGNS AND AXIS
         if(positiveSide) {
             calculatedProps.geo = {
                 width: last.geo.width - active.pos.x + last.pos.x,
@@ -324,6 +330,7 @@ export class Game {
     }
 
     handleGameLoss() {
+        this.state.lost = true;
         this.ui.renderLossUi();
         console.log(this.ui);
         console.log(this.state.lastBlock);

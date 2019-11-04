@@ -9,9 +9,8 @@ export class GameUi extends Ui {
         this.game = game;
 
         this.$container.setAttribute("style", `width: ${this.game.props.windowWidth}px;`);
-        this.$container.classList.add("container-fluid", "flex-column", "w-100", "mt-5", container)
+        this.$container.classList.add("container-fluid", "flex-column", "w-100", "mt-5", container) 
         
-
         this.$score;
     }
 
@@ -31,21 +30,23 @@ export class GameUi extends Ui {
     }
 
     renderLossUi() {
-        // let test = document.getElementById("game-score"); 
-
-        TweenMax.to(".game-ui", 1, {left: 90, onComplete:log});
-
- 
-        function log() {
-            console.log("Anim Comp")
-        }
-
         let lossUI = document.createElement("div");
         lossUI.setAttribute("id", "game-lost");
-        lossUI.setAttribute("class", "row");
+        lossUI.classList.add("container", "d-flex", "flex-column", "justify-content-center");
 
         lossUI.innerHTML = `
-            <h3 class="mx-auto">You lost</h3>
+            <div id="game-lost">
+                <div class="row">
+                    <h3 class="mx-auto">You lost</h3>
+                </div>
+                <div class="row">
+                    <p class="mx-auto">Please choose one of the options below</p>
+                </div>
+                <div class="row justify-content-center">
+                    <button id="game-restart" type="button" class="btn btn-success mx-2">Restart</button>
+                    <button type="button" class="btn btn-primary mx-2">Leaderboards</button>
+                </div>
+            </div>
         `;
 
         this.$container.appendChild(lossUI);

@@ -7,6 +7,12 @@ let windowProps = {
 	pixelRatio: window.pixelRatio,
 }
 
+/*
+	TODO: Rethink the whole ui thing. Ui maybe should be global.
+*/
+
+
+
 
 const startGame = type => {
 	const game = new Game(type, windowProps);
@@ -17,7 +23,7 @@ const startGame = type => {
 	}, false);
 
 	document.addEventListener('keydown', e =>  {
-		if(e.keyCode === 32) {
+		if(e.keyCode === 32 && !game.state.lost) {
 			game.placeBlock();
 		}
 	});
@@ -44,7 +50,7 @@ const startGame = type => {
 
 
 
-let mode = "dev";
+let mode = "";
 
 if(mode !== "dev") {
 	document.addEventListener("click", e => {
@@ -54,6 +60,8 @@ if(mode !== "dev") {
 			Ui.switchView("select-game-screen", "home-screen");
 		} else if(e.target.id === "start-single-player") {
 			Ui.hideUI("select-game-screen");
+			startGame("single-player");
+		} else if(e.target.id === "game-restart") {
 			startGame("single-player");
 		}
 	});
