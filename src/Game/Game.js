@@ -1,38 +1,37 @@
 import * as THREE from "three";
-import { TweenMax } from "gsap/all"; 
+import { TweenMax } from "gsap/all";
 import { Utils } from "../utils/utils";
 import { Block } from "./components/Block";
 import { GameUi } from "./components/GameUi";
 
-
 export class Game {
 	constructor(mode, props) {
-        this.mode = mode || "single-player";
+		this.mode = mode || "single-player";
 		this.props = {
 			windowWidth: props.width,
 			windowHeight: props.height,
 			windowPixelRatio: props.pixelRatio
-        };
-        
-        this.id = Utils.generateID();
-        // DOM
-        this.$parentNode = document.getElementById("game-container");
-        this.$domNode = document.createElement("div");
-        this.$domNode.setAttribute("id", this.id);
-        this.$parentNode.appendChild(this.$domNode);
+		};
 
-        this.ui = new GameUi("game-ui", this.id, this);
+		this.id = Utils.generateID();
+		// DOM
+		this.$parentNode = document.getElementById("game-container");
+		this.$domNode = document.createElement("div");
+		this.$domNode.setAttribute("id", this.id);
+		this.$parentNode.appendChild(this.$domNode);
 
-        // Scene
-        this.scene = new THREE.Scene();
-        
-        // Renderer
+		this.ui = new GameUi("game-ui", this.id, this);
+
+		// Scene
+		this.scene = new THREE.Scene();
+
+		// Renderer
 		this.renderer = new THREE.WebGLRenderer({ antialias: true });
 
 		this.renderer.setPixelRatio(this.props.pixelRatio);
 		this.renderer.setSize(this.props.windowWidth, this.props.windowHeight);
 		this.renderer.setClearColor("#D0CBC7", 1);
-		
+
 		// Camera
 		let aspectRatio = this.props.windowWidth / this.props.windowHeight;
 		let d = 20;
@@ -43,11 +42,11 @@ export class Game {
 			-d,
 			-100,
 			1000
-        );
-        
-        this.camera.position.set(2, 2, 2);
+		);
+
+		this.camera.position.set(2, 2, 2);
 		this.camera.lookAt(new THREE.Vector3(0, 0, 0));
-		
+
 		// Lights
 		this.light = new THREE.DirectionalLight(0xffffff, 0.5);
 		this.light.position.set(0, 499, 0);
@@ -57,277 +56,332 @@ export class Game {
 		// this.axesHelper = new THREE.AxesHelper(100);
 
 		// Regarding Blocks
-        this.group = new THREE.Group();
-        
-        this.state = {
-            activeBlock: {},
-            lastBlock: {},
-            plane: {
-                length: 15,
-                axis: "z",
-                forward: true
-            },
-            blockState: "ACTIVE",
-            activeColor: {
-                h: 70,
-                s: 100,
-                l: 78,
-            },
-            score: 0,
-            speed: 0.2
-        };
+		this.group = new THREE.Group();
+
+		this.state = {
+			activeBlock: {},
+			lastBlock: {},
+			plane: {
+				length: 15,
+				axis: "z",
+				forward: true
+			},
+			blockState: "ACTIVE",
+			activeColor: {
+				h: 70,
+				s: 100,
+				l: 78
+			},
+			score: 0,
+			speed: 0.2
+		};
 	}
 
 	stage() {
 		// Compile Static element
 		let baseProps = {
-            pos: {
-                x: 0,
-                y: 0,
-                z: 0
-            },
-            geo: {
-                width: 10,
-                height: 2,
-                depth: 10
-            },
-            color: {
-                h: 70,
-                s: 10,
-                l: 21
-            }
-        };
+			pos: {
+				x: 0,
+				y: 0,
+				z: 0
+			},
+			geo: {
+				width: 10,
+				height: 2,
+				depth: 10
+			},
+			color: {
+				h: 70,
+				s: 10,
+				l: 21
+			}
+		};
 
-        let firstBlockProps = {
-            pos: {
-                x: 0,
-                y: 2,
-                z: -15
-            },
-            geo: {
-                width: 10,
-                height: 2,
-                depth: 10
-            }
-        };
-        
-        firstBlockProps.color = this.state.activeColor;
+		let firstBlockProps = {
+			pos: {
+				x: 0,
+				y: 2,
+				z: -15
+			},
+			geo: {
+				width: 10,
+				height: 2,
+				depth: 10
+			}
+		};
 
-        this.ui.render();
-        this.ui.renderScore();
-        this.$domNode.appendChild(this.renderer.domElement);
-        
-        this.scene.add(this.camera);
-        this.scene.add(this.light);
-        this.scene.add(this.softLight);
-        this.scene.add(this.axesHelper);
-        this.scene.add(this.group);
+		firstBlockProps.color = this.state.activeColor;
 
-        new Block(this, baseProps).add();
-        new Block(this, firstBlockProps).add();
-        this.setActiveBlock();
-	}   
+		this.ui.render();
+		this.ui.renderScore();
+		this.$domNode.appendChild(this.renderer.domElement);
 
-    // TODO: FIX THIS FOR SIDE BY SIDE GAME
-    updateSize() {
-        let viewSize = 30;
-        
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.camera.left = window.innerWidth / -viewSize;
-        this.camera.right = window.innerWidth / viewSize;
-        this.camera.top = window.innerHeight / viewSize;
-        this.camera.bottom = window.innerHeight / -viewSize;
-        this.camera.updateProjectionMatrix();
-    }
+		this.scene.add(this.camera);
+		this.scene.add(this.light);
+		this.scene.add(this.softLight);
+		this.scene.add(this.axesHelper);
+		this.scene.add(this.group);
+
+		new Block(this, baseProps).add();
+		new Block(this, firstBlockProps).add();
+		this.setActiveBlock();
+	}
+
+	// TODO: FIX THIS FOR SIDE BY SIDE GAME
+	updateSize() {
+		let viewSize = 30;
+
+		this.renderer.setSize(window.innerWidth, window.innerHeight);
+		this.camera.left = window.innerWidth / -viewSize;
+		this.camera.right = window.innerWidth / viewSize;
+		this.camera.top = window.innerHeight / viewSize;
+		this.camera.bottom = window.innerHeight / -viewSize;
+		this.camera.updateProjectionMatrix();
+	}
 
 	render() {
 		this.renderer.render(this.scene, this.camera);
-    }
-    
-    placeBlock() {
-        this.setBlockState("PLACING");
+	}
 
-        this.state.lastBlock = this.group.children[this.group.children.length - 2];
+	placeBlock() {
+		this.setBlockState("PLACING");
 
+		this.state.lastBlock = this.group.children[
+			this.group.children.length - 2
+		];
 
-        let lastBlockProps = this.extractBlockProps(this.state.lastBlock);
-        let activeBlockProps = this.extractBlockProps(this.state.activeBlock);
+		let lastBlockProps = this.extractBlockProps(this.state.lastBlock);
+		let activeBlockProps = this.extractBlockProps(this.state.activeBlock);
 
-        let placeBlockProps = {};
-        let remainingBlock = {}
-        
-        if (this.state.plane.axis === "x" && activeBlockProps.pos.x - lastBlockProps.pos.x > 0 || this.state.plane.axis === "z" && activeBlockProps.pos.z - lastBlockProps.pos.z > 0) {
-            placeBlockProps = this.calcPlacedBlockProps(lastBlockProps, activeBlockProps, true);
-            remainingBlock = this.calcRemainingBlockProps(lastBlockProps, placeBlockProps, true);
+		let placeBlockProps = {};
+		let remainingBlock = {};
 
-        } else {
-            placeBlockProps = this.calcPlacedBlockProps(lastBlockProps, activeBlockProps, false);
-            remainingBlock = this.calcRemainingBlockProps(lastBlockProps, placeBlockProps, false);
-        }
+		if (
+			(this.state.plane.axis === "x" &&
+				activeBlockProps.pos.x - lastBlockProps.pos.x > 0) ||
+			(this.state.plane.axis === "z" &&
+				activeBlockProps.pos.z - lastBlockProps.pos.z > 0)
+		) {
+			placeBlockProps = this.calcPlacedBlockProps(
+				lastBlockProps,
+				activeBlockProps,
+				true
+			);
+			remainingBlock = this.calcRemainingBlockProps(
+				lastBlockProps,
+				placeBlockProps,
+				true
+			);
+		} else {
+			placeBlockProps = this.calcPlacedBlockProps(
+				lastBlockProps,
+				activeBlockProps,
+				false
+			);
+			remainingBlock = this.calcRemainingBlockProps(
+				lastBlockProps,
+				placeBlockProps,
+				false
+			);
+		}
 
-        console.log(remainingBlock)
+		console.log(remainingBlock);
 
-        if(placeBlockProps.geo.width <= 0 || placeBlockProps.geo.depth <= 0) {
-            console.log("lost")
-            this.handleGameLoss();
+		if (placeBlockProps.geo.width <= 0 || placeBlockProps.geo.depth <= 0) {
+			console.log("lost");
+			this.handleGameLoss();
 
-            // TODO: This works but needs to be refactored properly
+			// TODO: This works but needs to be refactored properly
 
-            this.state.activeBlock.material.dispose();
-            this.state.activeBlock.geometry.dispose();
-            this.group.remove(this.state.activeBlock);
-            this.scene.remove(this.state.activeBlock);
+			this.state.activeBlock.material.dispose();
+			this.state.activeBlock.geometry.dispose();
+			this.group.remove(this.state.activeBlock);
+			this.scene.remove(this.state.activeBlock);
 
-            activeBlockProps.color = this.state.activeColor;
-            // new Block(this, placeBlockProps).add();
-            new Block(this, activeBlockProps).addRemainder();
-        } else {
-            // Dispose of Old Block
-            this.state.activeBlock.material.dispose();
-            this.state.activeBlock.geometry.dispose();
-            this.group.remove(this.state.activeBlock);
-            this.scene.remove(this.state.activeBlock);
+			activeBlockProps.color = this.state.activeColor;
+			// new Block(this, placeBlockProps).add();
+			new Block(this, activeBlockProps).addRemainder();
+		} else {
+			// Dispose of Old Block
+			this.state.activeBlock.material.dispose();
+			this.state.activeBlock.geometry.dispose();
+			this.group.remove(this.state.activeBlock);
+			this.scene.remove(this.state.activeBlock);
 
-            this.updateScore(1);
-            // Place Block
-            this.state.speed += 0.01;
-            new Block(this, placeBlockProps).add();
-            new Block(this, remainingBlock).addRemainder();
-            // Create new Block
-            const createNewLayerProxy = () => {
-                this.createNewLayer();
-            };
+			this.updateScore(1);
+			// Place Block
+			this.state.speed += 0.01;
+			new Block(this, placeBlockProps).add();
+			new Block(this, remainingBlock).addRemainder();
+			// Create new Block
+			const createNewLayerProxy = () => {
+				this.createNewLayer();
+			};
 
-            createNewLayerProxy.bind(this);
+			createNewLayerProxy.bind(this);
 
-            console.log(0.5 * this.state.speed);
+			console.log(0.5 * this.state.speed);
 
-            let newGroupPos = this.group.position.y - 2;
-            TweenMax.to(this.group.position, 0.1, {y: newGroupPos, onComplete:createNewLayerProxy});
-        } 
-    }
+			let newGroupPos = this.group.position.y - 2;
+			TweenMax.to(this.group.position, 0.1, {
+				y: newGroupPos,
+				onComplete: createNewLayerProxy
+			});
+		}
+	}
 
-    createNewLayer() {
-        
-        this.incrementHue();
-        new Block(this).add();
-        this.setActiveBlock();
+	createNewLayer() {
+		this.incrementHue();
+		new Block(this).add();
+		this.setActiveBlock();
 
-        // this.group.position.y -= 2;
-        this.switchPlaneAxis();
+		// this.group.position.y -= 2;
+		this.switchPlaneAxis();
 
-        this.setBlockState("ACTIVE");
-    }
+		this.setBlockState("ACTIVE");
+	}
 
-    setBlockState(newState) {
-        this.state.blockState = newState;
-    }
+	setBlockState(newState) {
+		this.state.blockState = newState;
+	}
 
-    setActiveBlock() {
-        this.state.activeBlock = this.group.children[this.group.children.length - 1];
-    }
+	setActiveBlock() {
+		this.state.activeBlock = this.group.children[
+			this.group.children.length - 1
+		];
+	}
 
-    switchPlaneAxis() {
-        this.state.plane.axis === "x" ? this.state.plane.axis = "z" : this.state.plane.axis = "x";
-    }
+	switchPlaneAxis() {
+		this.state.plane.axis === "x"
+			? (this.state.plane.axis = "z")
+			: (this.state.plane.axis = "x");
+	}
 
-    incrementHue() {
-        this.state.activeColor.h + 10 >= 359 ? this.state.activeColor.h = 0 : this.state.activeColor.h += 10;
-    }
+	incrementHue() {
+		this.state.activeColor.h + 10 >= 359
+			? (this.state.activeColor.h = 0)
+			: (this.state.activeColor.h += 10);
+	}
 
-    updateScore(value) {
-        this.state.score += value;
-        this.ui.updateUiScore(this.state.score);
-    }
+	updateScore(value) {
+		this.state.score += value;
+		this.ui.updateUiScore(this.state.score);
+	}
 
-    extractBlockProps(block) {
-        return {
-            pos: {
-                x: block.position.x,
-                y: block.position.y,
-                z: block.position.z 
-            },
-            geo: {
-                width: block.geometry.parameters.width,
-                height: block.geometry.parameters.height,
-                depth: block.geometry.parameters.depth,
-            }
-        }
-    }
+	extractBlockProps(block) {
+		return {
+			pos: {
+				x: block.position.x,
+				y: block.position.y,
+				z: block.position.z
+			},
+			geo: {
+				width: block.geometry.parameters.width,
+				height: block.geometry.parameters.height,
+				depth: block.geometry.parameters.depth
+			}
+		};
+	}
 
-    calcPlacedBlockProps(last, active, positiveSide) {
-        let calculatedProps = {};
-        
-        // Calculate Geometry & Position
-        if(positiveSide) {
-            calculatedProps.geo = {
-                width: last.geo.width - active.pos.x + last.pos.x,
-                height: last.geo.height,
-                depth: last.geo.depth - active.pos.z + last.pos.z,
-            }
+	calcPlacedBlockProps(last, active, positiveSide) {
+		let calculatedProps = {};
 
-            calculatedProps.pos = {
-                x: active.pos.x - ((active.geo.width - calculatedProps.geo.width) / 2),
-                y: active.pos.y,
-                z: active.pos.z - ((active.geo.depth - calculatedProps.geo.depth) / 2)
-            }
+		// Calculate Geometry & Position
+		if (positiveSide) {
+			calculatedProps.geo = {
+				width:
+					last.geo.width +
+					(active.pos.x - last.pos.x) * (positiveSide ? -1 : 1),
+				height: last.geo.height,
+				depth: last.geo.depth - active.pos.z + last.pos.z
+			};
 
-        } else {
-            calculatedProps.geo = {
-                width: last.geo.width + active.pos.x - last.pos.x,
-                height: last.geo.height,
-                depth: last.geo.depth + active.pos.z - last.pos.z,
-            }
+			calculatedProps.pos = {
+				x:
+					active.pos.x -
+					(active.geo.width - calculatedProps.geo.width) / 2,
+				y: active.pos.y,
+				z:
+					active.pos.z -
+					(active.geo.depth - calculatedProps.geo.depth) / 2
+			};
+		} else {
+			calculatedProps.geo = {
+				width: last.geo.width + active.pos.x - last.pos.x,
+				height: last.geo.height,
+				depth: last.geo.depth + active.pos.z - last.pos.z
+			};
 
-            calculatedProps.pos = {
-                x: active.pos.x + ((active.geo.width - calculatedProps.geo.width) / 2),
-                y: active.pos.y,
-                z: active.pos.z + ((active.geo.depth - calculatedProps.geo.depth) / 2)
-            }
-        }
+			calculatedProps.pos = {
+				x:
+					active.pos.x +
+					(active.geo.width - calculatedProps.geo.width) / 2,
+				y: active.pos.y,
+				z:
+					active.pos.z +
+					(active.geo.depth - calculatedProps.geo.depth) / 2
+			};
+		}
 
-        calculatedProps.color = {...this.state.activeColor}
+		calculatedProps.color = { ...this.state.activeColor };
 
-        return calculatedProps;
-    }
+		return calculatedProps;
+	}
 
-    calcRemainingBlockProps(last, chopped, positiveSide) {
-        let calculatedProps = {};
+	calcRemainingBlockProps(last, chopped, positiveSide) {
+		let calculatedProps = {};
 
-        let subtractedGeo = {
-            width: last.geo.width - chopped.geo.width,
-            depth: last.geo.depth - chopped.geo.depth
-        }
+		let subtractedGeo = {
+			width: last.geo.width - chopped.geo.width,
+			depth: last.geo.depth - chopped.geo.depth
+		};
 
-        calculatedProps.geo = {
-            width: subtractedGeo.width <= 0 ? last.geo.width : subtractedGeo.width,
-            height: last.geo.height,
-            depth: subtractedGeo.depth <= 0 ? last.geo.depth : subtractedGeo.depth,
-        }
+		calculatedProps.geo = {
+			width:
+				subtractedGeo.width <= 0 ? last.geo.width : subtractedGeo.width,
+			height: last.geo.height,
+			depth:
+				subtractedGeo.depth <= 0 ? last.geo.depth : subtractedGeo.depth
+		};
 
-        if(positiveSide) {
-            calculatedProps.pos = {
-                x: subtractedGeo.width <= 0 ? chopped.pos.x : chopped.pos.x + ((chopped.geo.width +  calculatedProps.geo.width )/ 2),
-                y: 2, 
-                z: subtractedGeo.depth <= 0 ? chopped.pos.z : chopped.pos.z + ((chopped.geo.depth +  calculatedProps.geo.depth )/ 2)
-            } 
-        } else {  
-            calculatedProps.pos = {
-                x: subtractedGeo.width <= 0 ? chopped.pos.x : chopped.pos.x - ((chopped.geo.width +  calculatedProps.geo.width )/ 2),
-                y: 2, 
-                z: subtractedGeo.depth <= 0 ? chopped.pos.z : chopped.pos.z - ((chopped.geo.depth +  calculatedProps.geo.depth )/ 2)
-            }
-        }
+		if (positiveSide) {
+			calculatedProps.pos = {
+				x:
+					subtractedGeo.width <= 0
+						? chopped.pos.x
+						: chopped.pos.x +
+						  (chopped.geo.width + calculatedProps.geo.width) / 2,
+				y: 2,
+				z:
+					subtractedGeo.depth <= 0
+						? chopped.pos.z
+						: chopped.pos.z +
+						  (chopped.geo.depth + calculatedProps.geo.depth) / 2
+			};
+		} else {
+			calculatedProps.pos = {
+				x:
+					subtractedGeo.width <= 0
+						? chopped.pos.x
+						: chopped.pos.x -
+						  (chopped.geo.width + calculatedProps.geo.width) / 2,
+				y: 2,
+				z:
+					subtractedGeo.depth <= 0
+						? chopped.pos.z
+						: chopped.pos.z -
+						  (chopped.geo.depth + calculatedProps.geo.depth) / 2
+			};
+		}
 
-        calculatedProps.color = {...this.state.activeColor}
+		calculatedProps.color = { ...this.state.activeColor };
 
-        return calculatedProps;
-    }
+		return calculatedProps;
+	}
 
-    handleGameLoss() {
-        this.ui.renderLossUi();
-        console.log(this.ui);
-        console.log(this.state.lastBlock);
-    }
+	handleGameLoss() {
+		this.ui.renderLossUi();
+		console.log(this.ui);
+		console.log(this.state.lastBlock);
+	}
 }
-
