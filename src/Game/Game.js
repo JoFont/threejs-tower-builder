@@ -265,7 +265,6 @@ export class Game {
                 height: last.geo.height,
                 depth: last.geo.depth - active.pos.z + last.pos.z,
             }
-            console.log("Teste")
             calculatedProps.pos = {
                 x: active.pos.x - ((active.geo.width - calculatedProps.geo.width) / 2),
                 y: active.pos.y,

@@ -21,6 +21,6 @@ export default {
 		resolve(), // tells Rollup how to find imported modules in node_modules
 		commonjs(), // converts node modules to ES modules
 		production && terser(), // minify, but only in production
-		livereload()
+		!production && livereload()
 	]
 };
