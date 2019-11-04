@@ -35,6 +35,6 @@ jobs:
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
-          args: deploy
+          args: deploy --only hosting
         env:
           FIREBASE_TOKEN: 1//03T2Xs8LvM9WrCgYIARAAGAMSNwF-L9IrqzlGIbzSZz0suuR7R30Gz8vC6aQ4yn4oEiwPXoIsChFC7Wn7UVSZPemkfNeSmGU8FV4
