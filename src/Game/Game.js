@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { TweenMax } from "gsap/all"; 
+import { TweenMax, SteppedEase } from "gsap/all"; 
 import { Utils } from "../utils/utils";
 import { Block } from "./components/Block";
 import { GameUi } from "./components/GameUi";
@@ -333,30 +333,27 @@ export class Game {
         // 
 
         return new Promise((resolve, reject) => {
-            console.log(self.group);
-            // TweenMax.staggerTo(self.group.children, 10, {"scale.x": 0.1, "scale.z": 0.1}, 1);
 
+            let group = self.group;
             let groupLength = self.group.children.length;
-            let groupPos = self.group.position.y;
 
-            //TODO:  NOT WORKING POROPERLY
-            // TODO: Maybe use stepped easing from gsap
-
-            function increasePos() {
-                groupPos += 2;
+            function removeBlock() {
+                self.removeMesh(group.children[group.children.length - 1]);
             }
 
-            self.group.children.forEach((child, i) => {
-                TweenMax.to(child.scale, (groupLength / 4) - i, {x: 0.001, z: 0.001});
+            function removeScene() {
+                self.ui.transOut().then(response => {
+                    self.scene.dispose();
+                    self.$parentNode.removeChild(self.$domNode);
+                    resolve(response);
+                });
+            }
 
-                TweenMax.to(self.group.position, (groupLength / 4) - i, {y: groupPos, onComplete: increasePos});
+            self.group.children.slice().reverse().forEach((child, i) => {
+                TweenMax.to(child.scale, 0.3, {x: 0.001, z: 0.001, delay: i / 8, onComplete:removeBlock});
             });
 
-            self.ui.transOut().then(response => {
-                self.scene.dispose();
-                self.$parentNode.removeChild(self.$domNode);
-                resolve(response);
-            });
+            TweenMax.to(self.group.position, (groupLength / 8) , {y:0, onComplete: removeScene});
         });
     }
 

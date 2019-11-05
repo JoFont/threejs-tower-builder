@@ -1,6 +1,6 @@
 import { Game } from "./Game/Game";
 import { Ui } from "./Ui/Ui";
-import {html, render} from 'lit-html';
+
  
 let windowProps = {
 	width: window.innerWidth,
