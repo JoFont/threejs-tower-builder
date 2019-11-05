@@ -8,49 +8,75 @@ let windowProps = {
 	pixelRatio: window.pixelRatio,
 }
 
+let loggedUser = {};
 
 document.addEventListener('DOMContentLoaded', function() {
-	// FirebaseUI config.
+	
+	let auth = firebase.auth();
+	let db = firebase.firestore();
+
+	function handleLoggedIn(user) {
+		loggedUser = {
+            displayName: user.displayName,
+            email: user.email,
+            emailVerified: user.emailVerified,
+            photoURL: user.photoURL,
+            isAnonymous: user.isAnonymous,
+            uid: user.uid,
+            providerData: user.providerData,
+		};
+		
+		document.getElementById('loader').remove();
+
+        const mainScrenControls = html`
+            <div class="row justify-content-center mt-5">
+                <button id="main-menu-start-button" type="button" class="btn btn-success btn-lg px-5">Play</button>
+            </div>
+            <div class="row justify-content-center mt-3">
+                <button type="button" id="main-screen-leaderboards" class="btn btn-primary m-2">Leaderboard</button>
+            </div>
+        `;
+
+        render(mainScrenControls, document.getElementById("auth-game-controls"));
+	}
+
 	let uiConfig = {
 		callbacks: {
-		signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-			let user = authResult.user;
-			let credential = authResult.credential;
-			let isNewUser = authResult.additionalUserInfo.isNewUser;
-			let providerId = authResult.additionalUserInfo.providerId;
-			let operationType = authResult.operationType;
-			// Do something with the returned AuthResult.
-			// Return type determines whether we continue the redirect automatically
-			// or whether we leave that to developer to handle.
+			signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+				let user = authResult.user;
+				let credential = authResult.credential;
+				let isNewUser = authResult.additionalUserInfo.isNewUser;
+				let providerId = authResult.additionalUserInfo.providerId;
+				let operationType = authResult.operationType;
 
-			console.log(user);
+				handleLoggedIn(user);
 
-			const mainScrenControls = html`
-				<div class="row justify-content-center mt-5">
-					<button id="main-menu-start-button" type="button" class="btn btn-success btn-lg px-5">Play</button>
-				</div>
-				<div class="row justify-content-center mt-3">
-					<button type="button" class="btn btn-primary m-2">Leaderboard</button>
-				</div>
-			`;
+				// const mainScrenControls = html`
+				// 	<div class="row justify-content-center mt-5">
+				// 		<button id="main-menu-start-button" type="button" class="btn btn-success btn-lg px-5">Play</button>
+				// 	</div>
+				// 	<div class="row justify-content-center mt-3">
+				// 		<button type="button" id="main-screen-leaderboards" class="btn btn-primary m-2">Leaderboard</button>
+				// 	</div>
+				// `;
 
-			render(mainScrenControls, document.getElementById("auth-game-controls"));
+				// render(mainScrenControls, document.getElementById("auth-game-controls"));
 
-			return false;
-		},
-		signInFailure: function(error) {
-			// Some unrecoverable error occurred during sign-in.
-			// Return a promise when error handling is completed and FirebaseUI
-			// will reset, clearing any UI. This commonly occurs for error code
-			// 'firebaseui/anonymous-upgrade-merge-conflict' when merge conflict
-			// occurs. Check below for more details on this.
-			return handleUIError(error);
-		},
-		uiShown: function() {
-			// The widget is rendered.
-			// Hide the loader.
-			document.getElementById('loader').remove();
-		}
+				return false;
+			},
+			signInFailure: function(error) {
+				// Some unrecoverable error occurred during sign-in.
+				// Return a promise when error handling is completed and FirebaseUI
+				// will reset, clearing any UI. This commonly occurs for error code
+				// 'firebaseui/anonymous-upgrade-merge-conflict' when merge conflict
+				// occurs. Check below for more details on this.
+				return handleUIError(error);
+			},
+			uiShown: function() {
+				// The widget is rendered.
+				// Hide the loader.
+				document.getElementById('loader').remove();
+			}
 		},
 		credentialHelper: firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM,
 		// Query parameter name for mode.
@@ -78,75 +104,142 @@ document.addEventListener('DOMContentLoaded', function() {
 		tosUrl: '<your-tos-url>',
 		// Privacy policy url/callback.
 		privacyPolicyUrl: function() {
-		window.location.assign('<your-privacy-policy-url>');
+			window.location.assign('<your-privacy-policy-url>');
 		}
 	};
 
-	let ui = new firebaseui.auth.AuthUI(firebase.auth());
-	// The start method will wait until the DOM is loaded.
-	ui.start('#auth-game-controls', uiConfig);
-  });
+	firebase.auth().onAuthStateChanged(user => {
+		if (user) {
+			// User is signed in.
+			handleLoggedIn(user);
+			
+			let newGame = new Game("single-player", windowProps);
 
-
-let newGame = new Game("single-player", windowProps);
-
-const startGame = game => {
-	game.stage();
-
-	window.addEventListener("resize",() => {
-		game.updateSize();
-	}, false);
-
-	document.addEventListener('keydown', e =>  {
-		if(e.keyCode === 32 && !game.state.lost) {
-			game.placeBlock();
-		}
-	});
-
-	function loop() {
-		requestAnimationFrame(loop);
-		if (game.state.blockState === "ACTIVE") {	
-			// Move Block
-			let speed = game.state.speed;
-	
-			if (game.state.plane.forward === true && game.state.activeBlock.position[game.state.plane.axis] + speed < game.state.plane.length) {
-				game.state.activeBlock.position[game.state.plane.axis] += speed;
-			} else if (game.state.plane.forward === false && game.state.activeBlock.position[game.state.plane.axis] + speed > - game.state.plane.length) {
-				game.state.activeBlock.position[game.state.plane.axis] -= speed;
-			} else {
-				game.state.plane.forward = !game.state.plane.forward;
+			const startGame = game => {
+				game.stage();
+			
+				window.addEventListener("resize",() => {
+					game.updateSize();
+				}, false);
+			
+				document.addEventListener('keydown', e =>  {
+					if(e.keyCode === 32 && !game.state.lost) {
+						game.placeBlock();
+					}
+				});
+			
+				function loop() {
+					requestAnimationFrame(loop);
+					if (game.state.blockState === "ACTIVE") {	
+						// Move Block
+						let speed = game.state.speed;
+				
+						if (game.state.plane.forward === true && game.state.activeBlock.position[game.state.plane.axis] + speed < game.state.plane.length) {
+							game.state.activeBlock.position[game.state.plane.axis] += speed;
+						} else if (game.state.plane.forward === false && game.state.activeBlock.position[game.state.plane.axis] + speed > - game.state.plane.length) {
+							game.state.activeBlock.position[game.state.plane.axis] -= speed;
+						} else {
+							game.state.plane.forward = !game.state.plane.forward;
+						}
+					}
+				
+					game.render();
+				}
+				loop();
 			}
-		}
-	
-		game.render();
-	}
-	loop();
-}
-
-let mode = "";
-
-if(mode !== "dev") {
-	document.addEventListener("click", e => {
-		if(e.target.id === "main-menu-start-button") {
-			Ui.switchView("home-screen", "select-game-screen");
-		} else if(e.target.id === "back-to-home-btn") {
-			Ui.switchView("select-game-screen", "home-screen");
-		} else if(e.target.id === "start-single-player") {
-			Ui.hideUI("select-game-screen");
-			startGame(newGame);
 			
-			// game.start();
-		} else if(e.target.id === "game-restart") {
-			newGame.remove().then(response => {
-				newGame = new Game("single-player", windowProps);
-				startGame(newGame);
-			});
+			let mode = "";
 			
+			if(mode !== "dev") {
+				document.addEventListener("click", e => {
+					if(e.target.id === "main-menu-start-button") {
+						Ui.switchView("home-screen", "select-game-screen");
+					} else if(e.target.id === "back-to-home-btn") {
+						Ui.switchView("select-game-screen", "home-screen");
+					} else if(e.target.id === "start-single-player") {
+						Ui.hideUI("select-game-screen");
+						startGame(newGame);
+						
+						// game.start();
+					} else if(e.target.id === "game-restart") {
+						newGame.remove().then(response => {
+							newGame = new Game("single-player", windowProps);
+							startGame(newGame);
+						});
+					} else if(e.target.id === "main-screen-leaderboards") {
+		
+						db.collection("players").get().then(function(querySnapshot) {
+							// IT WERKS, Needs massive refactor everithing ion main
+							querySnapshot.forEach(function(doc) {
+								// doc.data() is never undefined for query doc snapshots
+								console.log(doc.id, " => ", doc.data());
+							});
+						});
+		
+						const leaderboard = players => html `
+							<div class="row mt-5">
+								<h4 class="mx-auto">Leaderboard</h4>
+							</div>
+							<div class="container justify-content-center mt-3">
+								<div class="col">
+									<div class="row">
+										<div class="col-2"><h6>#</h6></div>
+										<div class="col-8"><h6>Name</h6></div>
+										<div class="col-2"><h6>Score</h6></div>
+									</div>
+									${players.map((player, id) => html`
+										<div class="row">
+											<div class="col-2">${id + 1}.</div>
+											<div class="col-8">${player.name}</div>
+											<div class="col-2">${player.score}</div>
+										</div>
+									`)}
+								</div>
+							</div>
+						`;
+			
+						render(leaderboard, document.getElementById("main-screen-leaderboard"));
+					}
+				});
+			} else {
+				Ui.hideUI("ui");
+				startGame();
+			}
+
+
+
+
+
+
+
+
+
+
+		} else {
+			let ui = new firebaseui.auth.AuthUI(firebase.auth());
+			// The start method will wait until the DOM is loaded.
+			ui.start('#auth-game-controls', uiConfig);
 		}
 	});
-} else {
-	Ui.hideUI("ui");
-	startGame();
-}
+
+
+
+
+
+
+	
+
+
+
+	
+	
+
+
+
+});
+
+
+
+
 
 

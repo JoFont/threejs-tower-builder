@@ -38,3 +38,7 @@
 [debug] [2019-11-05T13:57:42.785Z] [runtime-status] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.3.0","resolution":"/mnt/c/Users/diogo/ironhack/projects/threejs-tower-builder/functions/node_modules/firebase-functions/lib/index.js"}
 [debug] [2019-11-05T13:57:43.199Z] [worker-~diagnostic~-0cfe4811-59dc-46a9-a2d1-61f58a4b667a]: exited
 [debug] [2019-11-05T13:57:43.199Z] [worker-~diagnostic~-0cfe4811-59dc-46a9-a2d1-61f58a4b667a]: FINISHED
+[debug] [2019-11-05T17:05:53.561Z] Error: connect ECONNREFUSED 172.217.168.163:443
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)
+[error] 
+[error] Error: An unexpected error has occurred.
