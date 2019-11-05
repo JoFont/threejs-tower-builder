@@ -34,22 +34,19 @@
 				<div class="row">
 					<h3 class="mx-auto">by Diogo Marques</h3>
 				</div>
-				<div class="row justify-content-center mt-5">
-					<button id="main-menu-start-button" type="button" class="btn btn-success btn-lg px-5">Play</button>
-				</div>
-				<div class="row justify-content-center mt-3">
-					<button type="button" class="btn btn-primary m-2">Leaderboard</button>
+				<div id="auth-game-controls" class="container flex-column w-75">
+					<div id="loader" class="d-flex justify-content-center">
+						<div class="spinner-border" role="status">
+							<span class="sr-only">Loading...</span>
+						</div>
+					</div>
 				</div>
 				<div class="row justify-content-center">
 					<button type="button" class="btn btn-light m-2 btn-sm">
 						<i class="fab fa-github mr-2"></i>
 						GitHub
 					</button>
-				</div>
-				
-				<div id="loader"></div>
-				<div id="firebaseui-auth-container" class="row">
-				</div>
+				</div>		
 			</div>
 
 			<div id="select-game-screen" class="container-fluid flex-column w-75 mt-5" style="display: none;">

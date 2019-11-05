@@ -1,6 +1,6 @@
 import { Game } from "./Game/Game";
 import { Ui } from "./Ui/Ui";
-
+import { html, render } from 'lit-html';
 
 let windowProps = {
 	width: window.innerWidth,
@@ -8,30 +8,35 @@ let windowProps = {
 	pixelRatio: window.pixelRatio,
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-	// // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-	// // The Firebase SDK is initialized and available here!
-	//
-	// firebase.auth().onAuthStateChanged(user => { });
-	// firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-	// firebase.messaging().requestPermission().then(() => { });
-	// firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-	//
-	// // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
+document.addEventListener('DOMContentLoaded', function() {
 	// FirebaseUI config.
-	var uiConfig = {
+	let uiConfig = {
 		callbacks: {
 		signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-			var user = authResult.user;
-			var credential = authResult.credential;
-			var isNewUser = authResult.additionalUserInfo.isNewUser;
-			var providerId = authResult.additionalUserInfo.providerId;
-			var operationType = authResult.operationType;
+			let user = authResult.user;
+			let credential = authResult.credential;
+			let isNewUser = authResult.additionalUserInfo.isNewUser;
+			let providerId = authResult.additionalUserInfo.providerId;
+			let operationType = authResult.operationType;
 			// Do something with the returned AuthResult.
 			// Return type determines whether we continue the redirect automatically
 			// or whether we leave that to developer to handle.
-			return true;
+
+			console.log(user);
+
+			const mainScrenControls = html`
+				<div class="row justify-content-center mt-5">
+					<button id="main-menu-start-button" type="button" class="btn btn-success btn-lg px-5">Play</button>
+				</div>
+				<div class="row justify-content-center mt-3">
+					<button type="button" class="btn btn-primary m-2">Leaderboard</button>
+				</div>
+			`;
+
+			render(mainScrenControls, document.getElementById("auth-game-controls"));
+
+			return false;
 		},
 		signInFailure: function(error) {
 			// Some unrecoverable error occurred during sign-in.
@@ -44,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		uiShown: function() {
 			// The widget is rendered.
 			// Hide the loader.
-			document.getElementById('loader').style.display = 'none';
+			document.getElementById('loader').remove();
 		}
 		},
 		credentialHelper: firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM,
@@ -54,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		queryParameterForSignInSuccessUrl: 'signInSuccessUrl',
 		// Will use popup for IDP Providers sign-in flow instead of the default, redirect.
 		signInFlow: 'popup',
-		signInSuccessUrl: '<url-to-redirect-to-on-success>',
+		signInSuccessUrl: '',
 		signInOptions: [
 		// Leave the lines as is for the providers you want to offer your users.
 		firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -77,36 +82,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	};
 
-	var ui = new firebaseui.auth.AuthUI(firebase.auth());
+	let ui = new firebaseui.auth.AuthUI(firebase.auth());
 	// The start method will wait until the DOM is loaded.
-	ui.start('#firebaseui-auth-container', uiConfig);
-
-
-
-
-	// try {
-	  
-	//   let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
-	//   document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
-	// } catch (e) {
-	//   console.error(e);
-	//   document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
-	// }
+	ui.start('#auth-game-controls', uiConfig);
   });
-
-/*
-	TODO: Rethink the whole ui thing. Ui maybe should be global.
-*/
-
-
-
-
-
-// // This is a lit-html template function. It returns a lit-html template.
-// const helloTemplate = (name) => html`<div id="FDB">Hello ${name}!</div>`;
-
-// // This renders <div>Hello Steve!</div> to the document body
-// render(helloTemplate('Steve'), document.body);
 
 
 let newGame = new Game("single-player", windowProps);

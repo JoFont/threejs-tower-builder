@@ -1,6 +1,5 @@
 import { Ui } from "../../Ui/Ui";
 import { TweenMax, CSSPlugin, AttrPlugin } from "gsap/all";
-import { html, render } from 'lit-html';
 const plugins = [CSSPlugin, AttrPlugin];
 
 export class GameUi extends Ui {
