@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { TweenMax, SteppedEase } from "gsap/all"; 
+import { TweenMax, Expo } from "gsap/all"; 
 import { Utils } from "../utils/utils";
 import { Block } from "./components/Block";
 import { GameUi } from "./components/GameUi";
@@ -349,11 +349,12 @@ export class Game {
                 });
             }
 
-            self.group.children.slice().reverse().forEach((child, i) => {
-                TweenMax.to(child.scale, 0.3, {x: 0.001, z: 0.001, delay: i / 8, onComplete:removeBlock});
+            self.group.children.slice().reverse().forEach((child, i) => {   
+                console.log(i / 8);
+                TweenMax.to(child.scale, 0.3, {x: 0.001, z: 0.001, delay: Math.log10(i), onComplete:removeBlock});
             });
 
-            TweenMax.to(self.group.position, (groupLength / 8) , {y:0, onComplete: removeScene});
+            TweenMax.to(self.group.position, Math.log10(groupLength) , {y:0, ease: Expo.easeIn, onComplete: removeScene});
         });
     }
 
