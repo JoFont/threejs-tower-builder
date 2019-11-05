@@ -30,6 +30,10 @@ export class GameUi extends Ui {
     }
 
     renderLossUi() {
+
+        this.$score.style.transition = "all 0.3s";
+        this.$score.style.transform = "scale(1.3)";
+
         let lossUI = document.createElement("div");
         lossUI.setAttribute("id", "game-lost");
         lossUI.classList.add("container", "d-flex", "flex-column", "justify-content-center");
