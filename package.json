@@ -23,6 +23,7 @@
     "dev": "npm-run-all --parallel start watch",
     "start": "serve public",
     "firebase-start": "firebase serve",
-    "firebase-dev": "npm-run-all --parallel firebase-start watch"
+    "firebase-dev": "npm-run-all --parallel firebase-start watch",
+    "functions": "firebase deploy --only functions"
   }
 }

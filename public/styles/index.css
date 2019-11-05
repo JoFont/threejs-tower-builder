@@ -5,6 +5,8 @@ body {
     overflow: hidden;
 }
 
+
+/* FIXME: Change specific fonts only in order for fontawesome to work */
 * {
     font-family: 'Roobert', Tahoma, Geneva, Verdana, sans-serif !important; 
 }

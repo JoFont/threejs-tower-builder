@@ -47,7 +47,7 @@ export class GameUi extends Ui {
                 </div>
                 <div class="row justify-content-center">
                     <button id="game-restart" type="button" class="btn btn-success mx-2">Restart</button>
-                    <button type="button" class="btn btn-primary mx-2">Leaderboards</button>
+                    <button id="leaderboards-from-game-TESTE" type="button" class="btn btn-primary mx-2">Leaderboards</button>
                 </div>
             </div>
         `;

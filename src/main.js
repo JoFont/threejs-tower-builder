@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
             providerData: user.providerData,
 		};
 		
-		document.getElementById('loader').remove();
+		
 
         const mainScrenControls = html`
             <div class="row justify-content-center mt-5">
@@ -49,18 +49,21 @@ document.addEventListener('DOMContentLoaded', function() {
 				let providerId = authResult.additionalUserInfo.providerId;
 				let operationType = authResult.operationType;
 
+
+				document.getElementById('loader').remove();
+
 				handleLoggedIn(user);
 
-				// const mainScrenControls = html`
-				// 	<div class="row justify-content-center mt-5">
-				// 		<button id="main-menu-start-button" type="button" class="btn btn-success btn-lg px-5">Play</button>
-				// 	</div>
-				// 	<div class="row justify-content-center mt-3">
-				// 		<button type="button" id="main-screen-leaderboards" class="btn btn-primary m-2">Leaderboard</button>
-				// 	</div>
-				// `;
+				const mainScrenControls = html`
+					<div class="row justify-content-center mt-5">
+						<button id="main-menu-start-button" type="button" class="btn btn-success btn-lg px-5">Play</button>
+					</div>
+					<div class="row justify-content-center mt-3">
+						<button type="button" id="main-screen-leaderboards" class="btn btn-primary m-2">Leaderboard</button>
+					</div>
+				`;
 
-				// render(mainScrenControls, document.getElementById("auth-game-controls"));
+				render(mainScrenControls, document.getElementById("auth-game-controls"));
 
 				return false;
 			},
@@ -169,8 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
 						});
 					} else if(e.target.id === "main-screen-leaderboards") {
 		
-						
-		
+					
 						const leaderboard = players => html `
 							<div class="row mt-5">
 								<h4 class="mx-auto">Leaderboard</h4>
@@ -198,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
 						db.collection("players").get().then(function(querySnapshot) {
 							querySnapshot.forEach(function(doc) {
 								// doc.data() is never undefined for query doc snapshots
-								console.log(doc.id, " => ", doc.data());
+								// console.log(doc.id, " => ", doc.data());
 								test.push(doc.data());
 							});
 
@@ -207,6 +209,11 @@ document.addEventListener('DOMContentLoaded', function() {
 						
 
 						
+					} else if(e.target.id === "leaderboards-from-game-TESTE") {
+						const teste = firebase.functions().httpsCallable("addToLeaderboard");
+						teste({score: newGame.state.score, date: new Date()}).then(result => {
+							console.log(result.data);
+						})
 					}
 				});
 			} else {
