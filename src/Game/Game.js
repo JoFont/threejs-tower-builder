@@ -330,8 +330,6 @@ export class Game {
     remove() {
         let self = this;
 
-        // 
-
         return new Promise((resolve, reject) => {
 
             let group = self.group;
@@ -350,7 +348,6 @@ export class Game {
             }
 
             self.group.children.slice().reverse().forEach((child, i) => {   
-                console.log(i / 8);
                 TweenMax.to(child.scale, 0.3, {x: 0.001, z: 0.001, delay: Math.log10(i), onComplete:removeBlock});
             });
 
@@ -358,5 +355,13 @@ export class Game {
         });
     }
 
+    display() {
+        // this.stage();
+        // this.render();
+
+        // for(let i = 0; i < 40; i++) {
+        //     this.plac
+        // }
+    }
 }
 

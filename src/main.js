@@ -114,6 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			handleLoggedIn(user);
 			
 			let newGame = new Game("single-player", windowProps);
+			// let newGame = new Game("display", windowProps).display();
 
 			const startGame = game => {
 				game.stage();
