@@ -42,3 +42,43 @@
     at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)
 [error] 
 [error] Error: An unexpected error has occurred.
+[debug] [2019-11-05T17:07:28.271Z] ----------------------------------------------------------------------
+[debug] [2019-11-05T17:07:28.273Z] Command:       /home/marquesfdiogo/.nvm/versions/node/v12.12.0/bin/node /home/marquesfdiogo/.nvm/versions/node/v12.12.0/bin/firebase serve
+[debug] [2019-11-05T17:07:28.273Z] CLI Version:   7.6.2
+[debug] [2019-11-05T17:07:28.273Z] Platform:      linux
+[debug] [2019-11-05T17:07:28.273Z] Node Version:  v12.12.0
+[debug] [2019-11-05T17:07:28.275Z] Time:          Tue Nov 05 2019 17:07:28 GMT+0000 (Greenwich Mean Time)
+[debug] [2019-11-05T17:07:28.276Z] ----------------------------------------------------------------------
+[debug] [2019-11-05T17:07:28.276Z] 
+[debug] [2019-11-05T17:07:28.316Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-11-05T17:07:28.316Z] > authorizing via signed-in user
+[debug] [2019-11-05T17:07:28.316Z] [iam] checking project awesome-tower-builder for permissions ["firebase.projects.get"]
+[debug] [2019-11-05T17:07:28.318Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-11-05T17:07:28.318Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-11-05T17:07:28.640Z] <<< HTTP RESPONSE 200
+[debug] [2019-11-05T17:07:28.648Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/awesome-tower-builder:testIamPermissions  
+
+[debug] [2019-11-05T17:07:29.699Z] <<< HTTP RESPONSE 200
+[debug] [2019-11-05T17:07:29.701Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/awesome-tower-builder  
+ 
+[debug] [2019-11-05T17:07:30.036Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from '/mnt/c/Users/diogo/ironhack/projects/threejs-tower-builder'...
+[info] 
+[debug] [2019-11-05T17:07:30.040Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/awesome-tower-builder/webApps/-/config  
+ 
+[info] ✔  functions: Using node@12 from host.
+[info] ✔  functions: Emulator started at http://localhost:5001
+[debug] [2019-11-05T17:07:30.618Z] <<< HTTP RESPONSE 200
+[info] i  functions: Watching "/mnt/c/Users/diogo/ironhack/projects/threejs-tower-builder/functions" for Cloud Functions...
+[debug] [2019-11-05T17:07:30.730Z] [worker-~diagnostic~-17e7b68d-6e66-4bfe-9a4a-63462a8f2f52]: BUSY
+[info] i  hosting: Serving hosting files from: public
+[info] ✔  hosting: Local server: http://localhost:5000
+[debug] [2019-11-05T17:07:31.003Z] [runtime-status] Functions runtime initialized. {"cwd":"/mnt/c/Users/diogo/ironhack/projects/threejs-tower-builder/functions","node_version":"12.12.0"}
+[debug] [2019-11-05T17:07:31.004Z] [runtime-status] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"admin_stubs":true} {}
+[debug] [2019-11-05T17:07:31.012Z] [runtime-status] Resolved module firebase-admin {"declared":true,"installed":true,"version":"8.7.0","resolution":"/mnt/c/Users/diogo/ironhack/projects/threejs-tower-builder/functions/node_modules/firebase-admin/lib/index.js"}
+[debug] [2019-11-05T17:07:31.019Z] [runtime-status] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.3.0","resolution":"/mnt/c/Users/diogo/ironhack/projects/threejs-tower-builder/functions/node_modules/firebase-functions/lib/index.js"}
+[debug] [2019-11-05T17:07:31.020Z] [runtime-status] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.3.0","resolution":"/mnt/c/Users/diogo/ironhack/projects/threejs-tower-builder/functions/node_modules/firebase-functions/lib/index.js"}
+[debug] [2019-11-05T17:07:31.404Z] [worker-~diagnostic~-17e7b68d-6e66-4bfe-9a4a-63462a8f2f52]: exited
+[debug] [2019-11-05T17:07:31.404Z] [worker-~diagnostic~-17e7b68d-6e66-4bfe-9a4a-63462a8f2f52]: FINISHED

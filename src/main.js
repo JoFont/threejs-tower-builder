@@ -168,13 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
 						});
 					} else if(e.target.id === "main-screen-leaderboards") {
 		
-						db.collection("players").get().then(function(querySnapshot) {
-							// IT WERKS, Needs massive refactor everithing ion main
-							querySnapshot.forEach(function(doc) {
-								// doc.data() is never undefined for query doc snapshots
-								console.log(doc.id, " => ", doc.data());
-							});
-						});
+						
 		
 						const leaderboard = players => html `
 							<div class="row mt-5">
@@ -189,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
 									</div>
 									${players.map((player, id) => html`
 										<div class="row">
-											<div class="col-2">${id + 1}.</div>
+										<div class="col-2">${id + 1}.</div>
 											<div class="col-8">${player.name}</div>
 											<div class="col-2">${player.score}</div>
 										</div>
@@ -197,8 +191,21 @@ document.addEventListener('DOMContentLoaded', function() {
 								</div>
 							</div>
 						`;
-			
-						render(leaderboard, document.getElementById("main-screen-leaderboard"));
+						
+						//TODO: IT WERKS, Needs massive refactor everithing ion main
+						let test = []
+						db.collection("players").get().then(function(querySnapshot) {
+							querySnapshot.forEach(function(doc) {
+								// doc.data() is never undefined for query doc snapshots
+								console.log(doc.id, " => ", doc.data());
+								test.push(doc.data());
+							});
+
+							render(leaderboard(test), document.getElementById("main-screen-leaderboard"));
+						});
+						
+
+						
 					}
 				});
 			} else {

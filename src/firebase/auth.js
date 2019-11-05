@@ -4,7 +4,6 @@ export class AUTH {
     constructor() {
         // this.firebase = firebase;
         this.user;
-        this.
 
 
     }
@@ -15,7 +14,7 @@ export class AUTH {
     }
 
     setUser(user) {
-        this.
+        
     }
 
     handleLoggedIn(user) {
