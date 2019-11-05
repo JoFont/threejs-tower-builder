@@ -1,0 +1,36 @@
+[debug] [2019-11-05T12:16:26.208Z] ----------------------------------------------------------------------
+[debug] [2019-11-05T12:16:26.211Z] Command:       /home/marquesfdiogo/.nvm/versions/node/v12.12.0/bin/node /home/marquesfdiogo/.nvm/versions/node/v12.12.0/bin/firebase serve
+[debug] [2019-11-05T12:16:26.211Z] CLI Version:   7.6.2
+[debug] [2019-11-05T12:16:26.211Z] Platform:      linux
+[debug] [2019-11-05T12:16:26.211Z] Node Version:  v12.12.0
+[debug] [2019-11-05T12:16:26.214Z] Time:          Tue Nov 05 2019 12:16:26 GMT+0000 (Greenwich Mean Time)
+[debug] [2019-11-05T12:16:26.214Z] ----------------------------------------------------------------------
+[debug] [2019-11-05T12:16:26.214Z] 
+[debug] [2019-11-05T12:16:26.254Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-11-05T12:16:26.254Z] > authorizing via signed-in user
+[debug] [2019-11-05T12:16:26.255Z] [iam] checking project awesome-tower-builder for permissions ["firebase.projects.get"]
+[debug] [2019-11-05T12:16:26.256Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/awesome-tower-builder:testIamPermissions  
+
+[debug] [2019-11-05T12:16:27.240Z] <<< HTTP RESPONSE 200
+[debug] [2019-11-05T12:16:27.243Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/awesome-tower-builder  
+ 
+[debug] [2019-11-05T12:16:27.522Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from '/mnt/c/Users/diogo/ironhack/projects/threejs-tower-builder'...
+[info] 
+[debug] [2019-11-05T12:16:27.526Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/awesome-tower-builder/webApps/-/config  
+ 
+[info] ✔  functions: Using node@12 from host.
+[info] ✔  functions: Emulator started at http://localhost:5001
+[debug] [2019-11-05T12:16:28.018Z] <<< HTTP RESPONSE 200
+[info] i  functions: Watching "/mnt/c/Users/diogo/ironhack/projects/threejs-tower-builder/functions" for Cloud Functions...
+[debug] [2019-11-05T12:16:28.143Z] [worker-~diagnostic~-8d2d6ae2-a881-4004-ae52-46c043c79224]: BUSY
+[info] i  hosting: Serving hosting files from: public
+[info] ✔  hosting: Local server: http://localhost:5000
+[debug] [2019-11-05T12:16:28.418Z] [runtime-status] Functions runtime initialized. {"cwd":"/mnt/c/Users/diogo/ironhack/projects/threejs-tower-builder/functions","node_version":"12.12.0"}
+[debug] [2019-11-05T12:16:28.419Z] [runtime-status] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"admin_stubs":true} {}
+[debug] [2019-11-05T12:16:28.428Z] [runtime-status] Resolved module firebase-admin {"declared":true,"installed":true,"version":"8.7.0","resolution":"/mnt/c/Users/diogo/ironhack/projects/threejs-tower-builder/functions/node_modules/firebase-admin/lib/index.js"}
+[debug] [2019-11-05T12:16:28.435Z] [runtime-status] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.3.0","resolution":"/mnt/c/Users/diogo/ironhack/projects/threejs-tower-builder/functions/node_modules/firebase-functions/lib/index.js"}
+[debug] [2019-11-05T12:16:28.436Z] [runtime-status] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.3.0","resolution":"/mnt/c/Users/diogo/ironhack/projects/threejs-tower-builder/functions/node_modules/firebase-functions/lib/index.js"}
+[debug] [2019-11-05T12:16:28.883Z] [worker-~diagnostic~-8d2d6ae2-a881-4004-ae52-46c043c79224]: exited
+[debug] [2019-11-05T12:16:28.884Z] [worker-~diagnostic~-8d2d6ae2-a881-4004-ae52-46c043c79224]: FINISHED
