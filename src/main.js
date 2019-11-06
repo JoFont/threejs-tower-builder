@@ -219,7 +219,15 @@ document.addEventListener('DOMContentLoaded', function() {
 					});
 				} else if(e.target.id === "user-score-post") {
 					e.target.classList.add("disabled");
-					let userName = document.getElementById("change-score-name").value;
+					e.target.innerHtml = `
+						<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+						Loading...
+					`;
+
+					let input = document.getElementById("change-score-name");
+					input.classList.add("disabled");
+					let userName = input.value;
+
 					addToLeaderboard({score: newGame.state.score, name: userName, date: Date.now()}).then(result => {
 						e.target.innerText = "Success";
 						newGame.remove().then(response => {
