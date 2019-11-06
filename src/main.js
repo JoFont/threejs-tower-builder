@@ -126,6 +126,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			let newGame = new Game("single-player", windowProps, user);
 
+			let requestAni;
+
 			const startGame = game => {
 				game.stage();
 			
@@ -138,9 +140,11 @@ document.addEventListener('DOMContentLoaded', function() {
 						game.placeBlock();
 					}
 				});
-			
+
+				
+				// Game loop
 				function loop() {
-					requestAnimationFrame(loop);
+					requestAni = requestAnimationFrame(loop);
 					if (game.state.blockState === "ACTIVE") {	
 						// Move Block
 						let speed = game.state.speed;
@@ -153,10 +157,11 @@ document.addEventListener('DOMContentLoaded', function() {
 							game.state.plane.forward = !game.state.plane.forward;
 						}
 					}
-				
+
 					game.render();
 				}
-				loop();
+
+				requestAni = requestAnimationFrame(loop);
 			}
 			
 			// Firebase Functions
@@ -225,6 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					startGame(newGame);
 				} else if(e.target.id === "leaderboards-from-game") {
 					newGame.remove().then(response => {
+						cancelAnimationFrame(requestAni);
 						newGame = new Game("single-player", windowProps, loggedUser);
 						Ui.showUI("leaderboards");
 					});
@@ -234,6 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					// game.start();
 				} else if(e.target.id === "game-restart") {
 					newGame.remove().then(response => {
+						cancelAnimationFrame(requestAni);
 						newGame = new Game("single-player", windowProps, loggedUser);
 						startGame(newGame);
 					});
@@ -252,6 +259,7 @@ document.addEventListener('DOMContentLoaded', function() {
 						e.target.innerText = "Success";
 						newGame.remove().then(response => {
 							// TODO: ADD DISPLAY VERSION OF THIS
+							cancelAnimationFrame(requestAni);
 							newGame = new Game("single-player", windowProps, loggedUser);
 							Ui.showUI("leaderboards");
 						});

@@ -37,3 +37,46 @@
 [info] i  functions[createPlayer]: function ignored because the firebaseauth.googleapis.com emulator does not exist or is not running.
 [debug] [2019-11-06T16:40:54.044Z] [worker-~diagnostic~-6f102694-f915-41dc-9a8d-ed66c83eb452]: exited
 [debug] [2019-11-06T16:40:54.045Z] [worker-~diagnostic~-6f102694-f915-41dc-9a8d-ed66c83eb452]: FINISHED
+[debug] [2019-11-06T19:51:06.753Z] ----------------------------------------------------------------------
+[debug] [2019-11-06T19:51:06.758Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Diogo Marques\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve
+[debug] [2019-11-06T19:51:06.758Z] CLI Version:   7.6.2
+[debug] [2019-11-06T19:51:06.758Z] Platform:      win32
+[debug] [2019-11-06T19:51:06.758Z] Node Version:  v12.13.0
+[debug] [2019-11-06T19:51:06.760Z] Time:          Wed Nov 06 2019 19:51:06 GMT+0000 (Western European Standard Time)
+[debug] [2019-11-06T19:51:06.760Z] ----------------------------------------------------------------------
+[debug] [2019-11-06T19:51:06.760Z] 
+[debug] [2019-11-06T19:51:06.782Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-11-06T19:51:06.784Z] > authorizing via signed-in user
+[debug] [2019-11-06T19:51:06.784Z] [iam] checking project awesome-tower-builder for permissions ["firebase.projects.get"]
+[debug] [2019-11-06T19:51:06.787Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-11-06T19:51:06.787Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-11-06T19:51:06.986Z] <<< HTTP RESPONSE 200
+[debug] [2019-11-06T19:51:06.995Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/awesome-tower-builder:testIamPermissions  
+
+[debug] [2019-11-06T19:51:07.854Z] <<< HTTP RESPONSE 200
+[debug] [2019-11-06T19:51:07.855Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/awesome-tower-builder  
+ 
+[debug] [2019-11-06T19:51:08.139Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'E:\Coding Projects\Web Projects\Tests and Learning\ironhack\projects\threejs-tower-builder'...
+[info] 
+[debug] [2019-11-06T19:51:08.203Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/awesome-tower-builder/webApps/-/config  
+ 
+[debug] [2019-11-06T19:51:08.905Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: public
+[info] +  hosting: Local server: http://localhost:5000
+[warn] !  Your requested "node" version "10" doesn't match your global version "12"
+[info] +  functions: Emulator started at http://localhost:5001
+[info] i  functions: Watching "E:\Coding Projects\Web Projects\Tests and Learning\ironhack\projects\threejs-tower-builder\functions" for Cloud Functions...
+[debug] [2019-11-06T19:51:11.085Z] [worker-~diagnostic~-e9d65705-5a48-449e-b1e4-98b17e369fd1]: BUSY
+[debug] [2019-11-06T19:51:11.963Z] [runtime-status] Functions runtime initialized. {"cwd":"E:\\Coding Projects\\Web Projects\\Tests and Learning\\ironhack\\projects\\threejs-tower-builder\\functions","node_version":"12.13.0"}
+[debug] [2019-11-06T19:51:11.964Z] [runtime-status] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"admin_stubs":true} {}
+[debug] [2019-11-06T19:51:11.973Z] [runtime-status] Resolved module firebase-admin {"declared":true,"installed":true,"version":"8.7.0","resolution":"E:\\Coding Projects\\Web Projects\\Tests and Learning\\ironhack\\projects\\threejs-tower-builder\\functions\\node_modules\\firebase-admin\\lib\\index.js"}
+[debug] [2019-11-06T19:51:11.981Z] [runtime-status] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.3.0","resolution":"E:\\Coding Projects\\Web Projects\\Tests and Learning\\ironhack\\projects\\threejs-tower-builder\\functions\\node_modules\\firebase-functions\\lib\\index.js"}
+[debug] [2019-11-06T19:51:11.982Z] [runtime-status] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.3.0","resolution":"E:\\Coding Projects\\Web Projects\\Tests and Learning\\ironhack\\projects\\threejs-tower-builder\\functions\\node_modules\\firebase-functions\\lib\\index.js"}
+[debug] [2019-11-06T19:51:13.419Z] Unsupported trigger: {"eventTrigger":{"resource":"projects/awesome-tower-builder","eventType":"providers/firebase.auth/eventTypes/user.create","service":"firebaseauth.googleapis.com"},"name":"createPlayer","entryPoint":"createPlayer"}
+[info] +  functions[addToLeaderboard]: http function initialized (http://localhost:5001/awesome-tower-builder/us-central1/addToLeaderboard).
+[info] i  functions[createPlayer]: function ignored because the firebaseauth.googleapis.com emulator does not exist or is not running.
+[debug] [2019-11-06T19:51:13.456Z] [worker-~diagnostic~-e9d65705-5a48-449e-b1e4-98b17e369fd1]: exited
+[debug] [2019-11-06T19:51:13.456Z] [worker-~diagnostic~-e9d65705-5a48-449e-b1e4-98b17e369fd1]: FINISHED
