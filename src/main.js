@@ -197,77 +197,67 @@ document.addEventListener('DOMContentLoaded', function() {
 				render(loadLeaderboard(playerList), document.getElementById("leaderboards"));
 			});
 
-			if(mode !== "dev") {
-				document.addEventListener("click", e => {
-					if(e.target.id === "main-menu-start-button") {
-						Ui.switchView("home-screen", "select-game-screen");
-					} else if(e.target.id === "back-to-home-btn") {
-						Ui.switchView("select-game-screen", "home-screen");
-					} else if(e.target.id === "start-single-player") {
-						Ui.hideUI("select-game-screen");
-						startGame(newGame);
-						
-						// game.start();
-					} else if(e.target.id === "game-restart") {
-						newGame.remove().then(response => {
-							newGame = new Game("single-player", windowProps, loggedUser);
-							startGame(newGame);
-						});
-					} else if(e.target.id === "main-screen-leaderboards") {
+			document.addEventListener("click", e => {
+				if(e.target.id === "main-menu-start-button") {
+					Ui.switchView("home-screen", "select-game-screen");
+				} else if(e.target.id === "back-to-home-btn") {
+					Ui.switchView("select-game-screen", "home-screen");
+				} else if(e.target.id === "start-single-player") {
+					Ui.hideUI("select-game-screen");
+					startGame(newGame);
 					
-						
-						//TODO: IT WERKS, Needs massive refactor everithing ion main
-						let test = []
-						db.collection("players").get().then(function(querySnapshot) {
-							querySnapshot.forEach(function(doc) {
-								// doc.data() is never undefined for query doc snapshots
-								// console.log(doc.id, " => ", doc.data());
-								test.push(doc.data());
-							});
-
-							render(leaderboard(test), document.getElementById("main-screen-leaderboard"));
+					// game.start();
+				} else if(e.target.id === "game-restart") {
+					newGame.remove().then(response => {
+						newGame = new Game("single-player", windowProps, loggedUser);
+						startGame(newGame);
+					});
+				} else if(e.target.id === "main-screen-leaderboards") {
+				
+					
+					//TODO: IT WERKS, Needs massive refactor everithing ion main
+					let test = []
+					db.collection("players").get().then(function(querySnapshot) {
+						querySnapshot.forEach(function(doc) {
+							// doc.data() is never undefined for query doc snapshots
+							// console.log(doc.id, " => ", doc.data());
+							test.push(doc.data());
 						});
-						
 
-						
-					} else if(e.target.id === "leaderboards-from-game-TESTE") {
+						render(leaderboard(test), document.getElementById("main-screen-leaderboard"));
+					});
+					
 
-						// newGame.ui.renderUpdateScore();
+					
+				} else if(e.target.id === "leaderboards-from-game-TESTE") {
 
-						// db.doc(`players/${loggedUser.uid}`).get().then(doc => {
-						// 	let highScore = doc.data().highScore;
-						// 	if(newGame.state.score > highScore) {
-								
-						// 	}
-						// })
-						
-					} else if(e.target.id === "user-score-post") {
-						e.target.classList.add("disabled");
-						addToLeaderboard({score: newGame.state.score, date: Date.now()}).then(result => {
-							e.target.innerText = "Success";
-							newGame.remove().then(response => {
-								// TODO: ADD DISPLAY VERSION OF THIS
-								newGame = new Game("single-player", windowProps, loggedUser);
-								Ui.showUI("leaderboards");
+					// newGame.ui.renderUpdateScore();
 
-							});
+					// db.doc(`players/${loggedUser.uid}`).get().then(doc => {
+					// 	let highScore = doc.data().highScore;
+					// 	if(newGame.state.score > highScore) {
 							
+					// 	}
+					// })
+					
+				} else if(e.target.id === "user-score-post") {
+					e.target.classList.add("disabled");
+					let name = document.getElementById("change-score-name").innerText;
+					addToLeaderboard({score: newGame.state.score, name: name, date: Date.now()}).then(result => {
+						e.target.innerText = "Success";
+						newGame.remove().then(response => {
+							// TODO: ADD DISPLAY VERSION OF THIS
+							newGame = new Game("single-player", windowProps, loggedUser);
+							Ui.showUI("leaderboards");
+
 						});
-					}
-				});
-			} else {
-				Ui.hideUI("ui");
-				startGame();
-			}
-
-
-
-
-
-
-
-
-
+						
+					});
+				} else if(e.target.classList.contains("sign-out-btn")){
+					auth.signOut();
+					location.reload();
+				}
+			});
 
 		} else {
 			let ui = new firebaseui.auth.AuthUI(firebase.auth());
