@@ -219,8 +219,8 @@ document.addEventListener('DOMContentLoaded', function() {
 					});
 				} else if(e.target.id === "user-score-post") {
 					e.target.classList.add("disabled");
-					let name = document.getElementById("change-score-name").value;
-					addToLeaderboard({score: newGame.state.score, name: name, date: Date.now()}).then(result => {
+					let userName = document.getElementById("change-score-name").value;
+					addToLeaderboard({score: newGame.state.score, name: userName, date: Date.now()}).then(result => {
 						e.target.innerText = "Success";
 						newGame.remove().then(response => {
 							// TODO: ADD DISPLAY VERSION OF THIS
