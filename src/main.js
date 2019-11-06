@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			`;
 
 
-			db.collection("players").where("highScore", ">", 0).orderBy("highScore").onSnapshot(query => {
+			db.collection("players").where("highScore", ">", 0).orderBy("highScore", "desc").onSnapshot(query => {
 				let playerList = [];
 
 				query.forEach(doc => {
