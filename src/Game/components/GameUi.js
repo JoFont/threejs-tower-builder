@@ -32,7 +32,6 @@ export class GameUi extends Ui {
     renderLossUi() {
         let user = this.game.user;
 
-
         this.$score.style.transition = "all 0.3s";
         this.$score.style.transform = "scale(1.3)";
 
@@ -63,7 +62,7 @@ export class GameUi extends Ui {
                                     
                                     <input type="text" class="form-control" id="change-score-name" placeholder="Name" value="${userName}">
                                 </div>
-                                <button type="button" class="btn btn-success mb-2">Send</button>
+                                <button id="user-score-post" type="button" class="btn btn-success mb-2">Send</button>
                             </form>
                         </div>
                         <div class="row justify-content-center mt-2">
@@ -89,8 +88,7 @@ export class GameUi extends Ui {
             }
         });
 
-
-
+        
         this.$container.appendChild(lossUI);
     }
 

@@ -117,7 +117,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			handleLoggedIn(user);
 			
 			let newGame = new Game("single-player", windowProps, user);
-			// let newGame = new Game("display", windowProps).display();
 
 			const startGame = game => {
 				game.stage();
@@ -154,6 +153,9 @@ document.addEventListener('DOMContentLoaded', function() {
 			
 			let mode = "";
 			
+			// Firebase Functions
+			const addToLeaderboard = firebase.functions().httpsCallable("addToLeaderboard");
+
 			if(mode !== "dev") {
 				document.addEventListener("click", e => {
 					if(e.target.id === "main-menu-start-button") {
@@ -171,8 +173,6 @@ document.addEventListener('DOMContentLoaded', function() {
 							startGame(newGame);
 						});
 					} else if(e.target.id === "main-screen-leaderboards") {
-		
-					
 						const leaderboard = players => html `
 							<div class="row mt-5">
 								<h4 class="mx-auto">Leaderboard</h4>
@@ -211,19 +211,19 @@ document.addEventListener('DOMContentLoaded', function() {
 						
 					} else if(e.target.id === "leaderboards-from-game-TESTE") {
 
-						newGame.ui.renderUpdateScore();
+						// newGame.ui.renderUpdateScore();
 
 						// db.doc(`players/${loggedUser.uid}`).get().then(doc => {
 						// 	let highScore = doc.data().highScore;
 						// 	if(newGame.state.score > highScore) {
-						// 		const addToLeaderboard = firebase.functions().httpsCallable("addToLeaderboard");
-
-						// 		addToLeaderboard({score: newGame.state.score, date: Date.now()}).then(result => {
-						// 			console.log(result.data);
-						// 		});
+								
 						// 	}
 						// })
 						
+					} else if(e.target.id === "user-score-post") {
+						addToLeaderboard({score: newGame.state.score, date: Date.now()}).then(result => {
+							console.log(result.data);
+						});
 					}
 				});
 			} else {

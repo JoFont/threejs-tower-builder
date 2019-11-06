@@ -8,7 +8,7 @@ const db = admin.firestore();
 exports.createPlayer = functions.auth.user().onCreate((user) => {
     const userData = {
         uid: user.uid,
-        name: user.displayName,
+        name: user.displayName === null ? "Anonymous" : user.displayName,
         highScore: 0,
         scoreHistory: [],
         photoURL: user.photoURL
