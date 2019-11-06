@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					input.classList.add("disabled");
 					let userName = input.value;
 
-					addToLeaderboard({score: newGame.state.score, name: userName, date: Date.now()}).then(result => {
+					addToLeaderboard({score: newGame.state.score, tower: newGame.state.tower, name: userName, date: Date.now()}).then(result => {
 						e.target.innerText = "Success";
 						newGame.remove().then(response => {
 							// TODO: ADD DISPLAY VERSION OF THIS
@@ -240,6 +240,8 @@ document.addEventListener('DOMContentLoaded', function() {
 				} else if(e.target.classList.contains("sign-out-btn")){
 					auth.signOut();
 					location.reload();
+				} else if(e.target.id === "main-screen-leaderboards") {
+					Ui.switchView("home-screen", "leaderboards");
 				}
 			});
 

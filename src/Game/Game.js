@@ -76,7 +76,8 @@ export class Game {
             },
             score: 0,
             speed: 0.2,
-            lost: false
+            lost: false,
+            tower: []
         };
 	}
 
@@ -180,6 +181,7 @@ export class Game {
             // Place Block
             this.state.speed += 0.01;
             new Block(this, placeBlockProps).add();
+            this.state.tower.push(placeBlockProps);
             new Block(this, remainingBlock).addRemainder();
             // Create new Block
             const createNewLayerProxy = () => {

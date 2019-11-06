@@ -24,10 +24,15 @@ exports.addToLeaderboard = functions.https.onCall((data, context) => {
     const date = data.date;
     const user = context.auth;
     const name = data.name;
+    const tower = data.tower;
     
     return db.doc(`players/${user.uid}`).update({
         highScore: score,
         name: name,
-        scoreHistory: admin.firestore.FieldValue.arrayUnion({score: score, date: date})
+        scoreHistory: admin.firestore.FieldValue.arrayUnion({
+            score: score,
+            date: date,
+            tower: tower
+        })
     });
 });
