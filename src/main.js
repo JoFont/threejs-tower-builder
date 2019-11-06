@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (user) {
 			// User is signed in.
 			handleLoggedIn(user);
-			
+
 			let newGame = new Game("single-player", windowProps, user);
 
 			const startGame = game => {
@@ -156,6 +156,47 @@ document.addEventListener('DOMContentLoaded', function() {
 			// Firebase Functions
 			const addToLeaderboard = firebase.functions().httpsCallable("addToLeaderboard");
 
+			
+			// LIT HTML FUNCTIONS
+			const loadLeaderboard = players => html `
+				<div class="row">
+					<h1 class="display-4 mx-auto">Three js - Tower Builder</h1>
+				</div>
+				<div class="row">
+					<h3 class="mx-auto">by Diogo Marques</h3>
+				</div>
+				<div class="row mt-5">
+					<h4 class="mx-auto">Global Leaderboard</h4>
+				</div>
+				<div class="container justify-content-center mt-3">
+					<div class="col">
+						<div class="row">
+							<div class="col-2"><h6>#</h6></div>
+							<div class="col-8"><h6>Name</h6></div>
+							<div class="col-2"><h6>Score</h6></div>
+						</div>
+						${players.map((player, id) => html`
+							<div class="row">
+							<div class="col-2">${id + 1}.</div>
+								<div class="col-8">${player.name}</div>
+								<div class="col-2">${player.highScore}</div>
+							</div>
+						`)}
+					</div>
+				</div>
+			`;
+
+
+			db.collection("players").where("highScore", ">", 0).orderBy("highScore").onSnapshot(query => {
+				let playerList = [];
+
+				query.forEach(doc => {
+					playerList.push(doc.data());
+				});
+
+				render(loadLeaderboard(playerList), document.getElementById("leaderboards"));
+			});
+
 			if(mode !== "dev") {
 				document.addEventListener("click", e => {
 					if(e.target.id === "main-menu-start-button") {
@@ -173,27 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
 							startGame(newGame);
 						});
 					} else if(e.target.id === "main-screen-leaderboards") {
-						const leaderboard = players => html `
-							<div class="row mt-5">
-								<h4 class="mx-auto">Leaderboard</h4>
-							</div>
-							<div class="container justify-content-center mt-3">
-								<div class="col">
-									<div class="row">
-										<div class="col-2"><h6>#</h6></div>
-										<div class="col-8"><h6>Name</h6></div>
-										<div class="col-2"><h6>Score</h6></div>
-									</div>
-									${players.map((player, id) => html`
-										<div class="row">
-										<div class="col-2">${id + 1}.</div>
-											<div class="col-8">${player.name}</div>
-											<div class="col-2">${player.score}</div>
-										</div>
-									`)}
-								</div>
-							</div>
-						`;
+					
 						
 						//TODO: IT WERKS, Needs massive refactor everithing ion main
 						let test = []
@@ -221,8 +242,16 @@ document.addEventListener('DOMContentLoaded', function() {
 						// })
 						
 					} else if(e.target.id === "user-score-post") {
+						e.target.classList.add("disabled");
 						addToLeaderboard({score: newGame.state.score, date: Date.now()}).then(result => {
-							console.log(result.data);
+							e.target.innerText = "Success";
+							newGame.remove().then(response => {
+								// TODO: ADD DISPLAY VERSION OF THIS
+								newGame = new Game("single-player", windowProps, loggedUser);
+								Ui.showUI("leaderboards");
+
+							});
+							
 						});
 					}
 				});

@@ -92,27 +92,6 @@ export class GameUi extends Ui {
         this.$container.appendChild(lossUI);
     }
 
-    renderUpdateScore() {
-
-        // this.$score.style.transition = "all 0.3s";
-        // this.$score.style.transform = "scale(1.3)";
-
-        let updateScoreUi = document.createElement("div");
-        updateScoreUi.setAttribute("id", "game-lost");
-        updateScoreUi.classList.add("container", "d-flex", "flex-column", "justify-content-center");
-
-        updateScoreUi.innerHTML = `
-            <div class="container">
-                <div class="row justify-content-center">
-                    
-                </div>
-            </div>
-        `;
-
-        this.$container.removeChild(document.getElementById("game-lost"));
-        this.$container.appendChild(updateScoreUi);
-    }
-
     transOut() {
         let children = this.$container.childNodes
 
