@@ -1,0 +1,39 @@
+[debug] [2019-11-06T16:40:50.488Z] ----------------------------------------------------------------------
+[debug] [2019-11-06T16:40:50.491Z] Command:       /home/marquesfdiogo/.nvm/versions/node/v12.12.0/bin/node /home/marquesfdiogo/.nvm/versions/node/v12.12.0/bin/firebase serve
+[debug] [2019-11-06T16:40:50.491Z] CLI Version:   7.6.2
+[debug] [2019-11-06T16:40:50.491Z] Platform:      linux
+[debug] [2019-11-06T16:40:50.491Z] Node Version:  v12.12.0
+[debug] [2019-11-06T16:40:50.495Z] Time:          Wed Nov 06 2019 16:40:50 GMT+0000 (Greenwich Mean Time)
+[debug] [2019-11-06T16:40:50.495Z] ----------------------------------------------------------------------
+[debug] [2019-11-06T16:40:50.495Z] 
+[debug] [2019-11-06T16:40:50.509Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-11-06T16:40:50.510Z] > authorizing via signed-in user
+[debug] [2019-11-06T16:40:50.510Z] [iam] checking project awesome-tower-builder for permissions ["firebase.projects.get"]
+[debug] [2019-11-06T16:40:50.511Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/awesome-tower-builder:testIamPermissions  
+
+[debug] [2019-11-06T16:40:51.455Z] <<< HTTP RESPONSE 200
+[debug] [2019-11-06T16:40:51.457Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/awesome-tower-builder  
+ 
+[debug] [2019-11-06T16:40:51.757Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from '/mnt/c/Users/diogo/ironhack/projects/threejs-tower-builder'...
+[info] 
+[debug] [2019-11-06T16:40:51.763Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/awesome-tower-builder/webApps/-/config  
+ 
+[warn] ⚠  Your requested "node" version "10" doesn't match your global version "12"
+[info] ✔  functions: Emulator started at http://localhost:5001
+[debug] [2019-11-06T16:40:52.671Z] <<< HTTP RESPONSE 200
+[info] i  functions: Watching "/mnt/c/Users/diogo/ironhack/projects/threejs-tower-builder/functions" for Cloud Functions...
+[debug] [2019-11-06T16:40:52.784Z] [worker-~diagnostic~-6f102694-f915-41dc-9a8d-ed66c83eb452]: BUSY
+[info] i  hosting: Serving hosting files from: public
+[info] ✔  hosting: Local server: http://localhost:5000
+[debug] [2019-11-06T16:40:53.027Z] [runtime-status] Functions runtime initialized. {"cwd":"/mnt/c/Users/diogo/ironhack/projects/threejs-tower-builder/functions","node_version":"12.12.0"}
+[debug] [2019-11-06T16:40:53.027Z] [runtime-status] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"admin_stubs":true} {}
+[debug] [2019-11-06T16:40:53.035Z] [runtime-status] Resolved module firebase-admin {"declared":true,"installed":true,"version":"8.7.0","resolution":"/mnt/c/Users/diogo/ironhack/projects/threejs-tower-builder/functions/node_modules/firebase-admin/lib/index.js"}
+[debug] [2019-11-06T16:40:53.043Z] [runtime-status] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.3.0","resolution":"/mnt/c/Users/diogo/ironhack/projects/threejs-tower-builder/functions/node_modules/firebase-functions/lib/index.js"}
+[debug] [2019-11-06T16:40:53.044Z] [runtime-status] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.3.0","resolution":"/mnt/c/Users/diogo/ironhack/projects/threejs-tower-builder/functions/node_modules/firebase-functions/lib/index.js"}
+[debug] [2019-11-06T16:40:54.028Z] Unsupported trigger: {"eventTrigger":{"resource":"projects/awesome-tower-builder","eventType":"providers/firebase.auth/eventTypes/user.create","service":"firebaseauth.googleapis.com"},"name":"createPlayer","entryPoint":"createPlayer"}
+[info] ✔  functions[addToLeaderboard]: http function initialized (http://localhost:5001/awesome-tower-builder/us-central1/addToLeaderboard).
+[info] i  functions[createPlayer]: function ignored because the firebaseauth.googleapis.com emulator does not exist or is not running.
+[debug] [2019-11-06T16:40:54.044Z] [worker-~diagnostic~-6f102694-f915-41dc-9a8d-ed66c83eb452]: exited
+[debug] [2019-11-06T16:40:54.045Z] [worker-~diagnostic~-6f102694-f915-41dc-9a8d-ed66c83eb452]: FINISHED
