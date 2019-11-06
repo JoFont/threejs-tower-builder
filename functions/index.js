@@ -28,11 +28,11 @@ exports.addToLeaderboard = functions.https.onCall((data, context) => {
     
     return db.doc(`players/${user.uid}`).update({
         highScore: score,
+        highestTower: tower,
         name: name,
         scoreHistory: admin.firestore.FieldValue.arrayUnion({
             score: score,
             date: date,
-            tower: tower
         })
     });
 });
