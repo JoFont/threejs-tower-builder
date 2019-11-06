@@ -6,8 +6,9 @@ import { GameUi } from "./components/GameUi";
 
 
 export class Game {
-	constructor(mode, props) {
+	constructor(mode, props, user) {
         this.mode = mode || "single-player";
+        this.user = user;
 		this.props = {
 			windowWidth: props.width,
 			windowHeight: props.height,

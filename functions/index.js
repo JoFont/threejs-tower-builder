@@ -18,21 +18,14 @@ exports.createPlayer = functions.auth.user().onCreate((user) => {
 });
 
 
-// TODO: UPDATE THIS, CLIENT NEEDS TO FETCH AND THEN SEND REQUEST TO UPDATE;
-// TODO: LIKE THIS IT'S NOT WORKING
+
 exports.addToLeaderboard = functions.https.onCall((data, context) => {
     const score = data.score;
     const date = data.date;
-    const user = context.auth.uid;
+    const user = context.auth;
     
-    let fetchedData = db.doc(`players/${user}`).get();
-    return fetchedData;
-    // return highScore;
-
-    // let finalScore = score > highScore ? score : highScore;
-
-    // return db.doc(`players/${user.uid}`).update({
-    //     highScore: finalScore,
-    //     scoreHistory: admin.firestore.FieldValue.arrayUnion({score: score, date: date})
-    // });
+    return db.doc(`players/${user.uid}`).update({
+        highScore: score,
+        scoreHistory: admin.firestore.FieldValue.arrayUnion({score: score, date: date})
+    });
 });

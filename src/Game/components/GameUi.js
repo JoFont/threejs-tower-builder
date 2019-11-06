@@ -2,6 +2,7 @@ import { Ui } from "../../Ui/Ui";
 import { TweenMax, CSSPlugin, AttrPlugin } from "gsap/all";
 const plugins = [CSSPlugin, AttrPlugin];
 
+
 export class GameUi extends Ui {
     constructor(container, parent, game) {
         super(container, parent);
@@ -29,6 +30,8 @@ export class GameUi extends Ui {
     }
 
     renderLossUi() {
+        let user = this.game.user;
+
 
         this.$score.style.transition = "all 0.3s";
         this.$score.style.transform = "scale(1.3)";
@@ -37,22 +40,79 @@ export class GameUi extends Ui {
         lossUI.setAttribute("id", "game-lost");
         lossUI.classList.add("container", "d-flex", "flex-column", "justify-content-center");
 
-        lossUI.innerHTML = `
+        let self = this;
+        firebase.firestore().doc(`players/${user.uid}`).get().then(doc => {
+            let highScore = doc.data().highScore;
+            let userName = doc.data().name;
+
+            if(self.game.state.score > highScore) {
+                lossUI.innerHTML = `
+                    <div class="container">
+                        <div class="row">
+                            <h3 class="mx-auto">You lost</h3>
+                        </div>
+                        <div class="row">
+                            <h5 class="mx-auto">You beat your last highest score of <strong>${highScore}</strong>!</h5>
+                        </div>
+                        <div class="row mt-3">
+                            <p class="mx-auto">Send your new score to the Leaderboards</p>
+                        </div>
+                        <div class="row justify-content-center">
+                            <form class="form-inline">
+                                <div class="form-group mx-sm-3 mb-2">
+                                    
+                                    <input type="text" class="form-control" id="change-score-name" placeholder="Name" value="${userName}">
+                                </div>
+                                <button type="button" class="btn btn-success mb-2">Send</button>
+                            </form>
+                        </div>
+                        <div class="row justify-content-center mt-2">
+                            <button id="game-restart" type="button" class="btn btn-danger mx-2">Restart</button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                lossUI.innerHTML = `
+                    <div class="container">
+                        <div class="row">
+                            <h3 class="mx-auto">You lost</h3>
+                        </div>
+                        <div class="row">
+                            <p class="mx-auto">Please choose one of the options below</p>
+                        </div>
+                        <div class="row justify-content-center">
+                            <button id="game-restart" type="button" class="btn btn-success mx-2">Restart</button>
+                            <button id="leaderboards-from-game" type="button" class="btn btn-primary mx-2">Leaderboards</button>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+
+
+
+        this.$container.appendChild(lossUI);
+    }
+
+    renderUpdateScore() {
+
+        // this.$score.style.transition = "all 0.3s";
+        // this.$score.style.transform = "scale(1.3)";
+
+        let updateScoreUi = document.createElement("div");
+        updateScoreUi.setAttribute("id", "game-lost");
+        updateScoreUi.classList.add("container", "d-flex", "flex-column", "justify-content-center");
+
+        updateScoreUi.innerHTML = `
             <div class="container">
-                <div class="row">
-                    <h3 class="mx-auto">You lost</h3>
-                </div>
-                <div class="row">
-                    <p class="mx-auto">Please choose one of the options below</p>
-                </div>
                 <div class="row justify-content-center">
-                    <button id="game-restart" type="button" class="btn btn-success mx-2">Restart</button>
-                    <button id="leaderboards-from-game-TESTE" type="button" class="btn btn-primary mx-2">Leaderboards</button>
+                    
                 </div>
             </div>
         `;
 
-        this.$container.appendChild(lossUI);
+        this.$container.removeChild(document.getElementById("game-lost"));
+        this.$container.appendChild(updateScoreUi);
     }
 
     transOut() {
@@ -64,7 +124,7 @@ export class GameUi extends Ui {
                 duration = i * 400;
     
                 node.style.transition = `all ${duration}ms`;
-                node.style.transform = "translateY(-300px)";
+                node.style.transform = "translateY(-500px)";
             });
 
             setTimeout(() => {

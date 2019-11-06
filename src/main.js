@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			// User is signed in.
 			handleLoggedIn(user);
 			
-			let newGame = new Game("single-player", windowProps);
+			let newGame = new Game("single-player", windowProps, user);
 			// let newGame = new Game("display", windowProps).display();
 
 			const startGame = game => {
@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
 						// game.start();
 					} else if(e.target.id === "game-restart") {
 						newGame.remove().then(response => {
-							newGame = new Game("single-player", windowProps);
+							newGame = new Game("single-player", windowProps, loggedUser);
 							startGame(newGame);
 						});
 					} else if(e.target.id === "main-screen-leaderboards") {
@@ -210,10 +210,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
 						
 					} else if(e.target.id === "leaderboards-from-game-TESTE") {
-						const teste = firebase.functions().httpsCallable("addToLeaderboard");
-						teste({score: newGame.state.score, date: new Date()}).then(result => {
-							console.log(result.data);
-						})
+
+						newGame.ui.renderUpdateScore();
+
+						// db.doc(`players/${loggedUser.uid}`).get().then(doc => {
+						// 	let highScore = doc.data().highScore;
+						// 	if(newGame.state.score > highScore) {
+						// 		const addToLeaderboard = firebase.functions().httpsCallable("addToLeaderboard");
+
+						// 		addToLeaderboard({score: newGame.state.score, date: Date.now()}).then(result => {
+						// 			console.log(result.data);
+						// 		});
+						// 	}
+						// })
+						
 					}
 				});
 			} else {
