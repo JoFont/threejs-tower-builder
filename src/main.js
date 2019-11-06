@@ -10,6 +10,8 @@ let windowProps = {
 
 let loggedUser = {};
 
+// FIXME: UPGRADE USERS MERGE CONFICTS(https://github.com/firebase/firebaseui-web#upgrading-anonymous-users)
+
 document.addEventListener('DOMContentLoaded', function() {
 	
 	let auth = firebase.auth();
@@ -61,6 +63,11 @@ document.addEventListener('DOMContentLoaded', function() {
 					<div class="row justify-content-center mt-3">
 						<button type="button" id="main-screen-leaderboards" class="btn btn-primary m-2">Leaderboard</button>
 					</div>
+					<div class="row justify-content-center">
+						<button type="button" class="btn btn-warning m-2 btn-sm sign-out-btn">
+							Sign Out
+						</button>
+					</div>
 				`;
 
 				render(mainScrenControls, document.getElementById("auth-game-controls"));
@@ -87,6 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		// Query parameter name for sign in success url.
 		queryParameterForSignInSuccessUrl: 'signInSuccessUrl',
 		// Will use popup for IDP Providers sign-in flow instead of the default, redirect.
+		autoUpgradeAnonymousUsers: true,
 		signInFlow: 'popup',
 		signInSuccessUrl: '',
 		signInOptions: [
@@ -151,8 +159,6 @@ document.addEventListener('DOMContentLoaded', function() {
 				loop();
 			}
 			
-			let mode = "";
-			
 			// Firebase Functions
 			const addToLeaderboard = firebase.functions().httpsCallable("addToLeaderboard");
 
@@ -204,52 +210,22 @@ document.addEventListener('DOMContentLoaded', function() {
 					Ui.switchView("select-game-screen", "home-screen");
 				} else if(e.target.id === "start-single-player") {
 					Ui.hideUI("select-game-screen");
-					startGame(newGame);
-					
+					startGame(newGame);	
 					// game.start();
 				} else if(e.target.id === "game-restart") {
 					newGame.remove().then(response => {
 						newGame = new Game("single-player", windowProps, loggedUser);
 						startGame(newGame);
 					});
-				} else if(e.target.id === "main-screen-leaderboards") {
-				
-					
-					//TODO: IT WERKS, Needs massive refactor everithing ion main
-					let test = []
-					db.collection("players").get().then(function(querySnapshot) {
-						querySnapshot.forEach(function(doc) {
-							// doc.data() is never undefined for query doc snapshots
-							// console.log(doc.id, " => ", doc.data());
-							test.push(doc.data());
-						});
-
-						render(leaderboard(test), document.getElementById("main-screen-leaderboard"));
-					});
-					
-
-					
-				} else if(e.target.id === "leaderboards-from-game-TESTE") {
-
-					// newGame.ui.renderUpdateScore();
-
-					// db.doc(`players/${loggedUser.uid}`).get().then(doc => {
-					// 	let highScore = doc.data().highScore;
-					// 	if(newGame.state.score > highScore) {
-							
-					// 	}
-					// })
-					
 				} else if(e.target.id === "user-score-post") {
 					e.target.classList.add("disabled");
-					let name = document.getElementById("change-score-name").innerText;
+					let name = document.getElementById("change-score-name").value;
 					addToLeaderboard({score: newGame.state.score, name: name, date: Date.now()}).then(result => {
 						e.target.innerText = "Success";
 						newGame.remove().then(response => {
 							// TODO: ADD DISPLAY VERSION OF THIS
 							newGame = new Game("single-player", windowProps, loggedUser);
 							Ui.showUI("leaderboards");
-
 						});
 						
 					});
@@ -265,21 +241,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			ui.start('#auth-game-controls', uiConfig);
 		}
 	});
-
-
-
-
-
-
-	
-
-
-
-	
-	
-
-
-
 });
 
 

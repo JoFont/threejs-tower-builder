@@ -1,0 +1,13 @@
+[debug] [2019-11-06T12:07:45.171Z] ----------------------------------------------------------------------
+[debug] [2019-11-06T12:07:45.174Z] Command:       /home/marquesfdiogo/.nvm/versions/node/v12.12.0/bin/node /home/marquesfdiogo/.nvm/versions/node/v12.12.0/bin/firebase serve
+[debug] [2019-11-06T12:07:45.174Z] CLI Version:   7.6.2
+[debug] [2019-11-06T12:07:45.174Z] Platform:      linux
+[debug] [2019-11-06T12:07:45.174Z] Node Version:  v12.12.0
+[debug] [2019-11-06T12:07:45.177Z] Time:          Wed Nov 06 2019 12:07:45 GMT+0000 (Greenwich Mean Time)
+[debug] [2019-11-06T12:07:45.177Z] ----------------------------------------------------------------------
+[debug] [2019-11-06T12:07:45.177Z] 
+[debug] [2019-11-06T12:07:45.223Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-11-06T12:07:45.224Z] > authorizing via signed-in user
+[debug] [2019-11-06T12:07:45.224Z] [iam] checking project awesome-tower-builder for permissions ["firebase.projects.get"]
+[debug] [2019-11-06T12:07:45.226Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/awesome-tower-builder:testIamPermissions  
+
