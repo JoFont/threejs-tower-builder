@@ -190,10 +190,19 @@ document.addEventListener('DOMContentLoaded', function() {
 						`)}
 					</div>
 				</div>
+				<div class="row justify-content-center mt-5">
+					<button id="replay-from-leaderboard" type="button" class="btn btn-success btn-lg px-5">Play Again</button>
+				</div>
+				<div class="row justify-content-center mt-3">
+					<button id="back-to-home-btn-lead" type="button" class="btn btn-dark m-2 btn-sm">
+						<i class="fas fa-arrow-left mr-2"></i>
+						Back
+					</button>
+				</div>
 			`;
 
 
-			db.collection("players").where("highScore", ">", 0).orderBy("highScore", "desc").onSnapshot(query => {
+			db.collection("players").where("highScore", ">", 0).orderBy("highScore", "desc").limit(20).onSnapshot(query => {
 				let playerList = [];
 
 				query.forEach(doc => {
@@ -208,6 +217,17 @@ document.addEventListener('DOMContentLoaded', function() {
 					Ui.switchView("home-screen", "select-game-screen");
 				} else if(e.target.id === "back-to-home-btn") {
 					Ui.switchView("select-game-screen", "home-screen");
+					
+				} else if(e.target.id === "back-to-home-btn-lead") {
+					Ui.switchView("leaderboards", "home-screen");
+				} else if(e.target.id === "replay-from-leaderboard") {
+					Ui.hideUI("leaderboards");
+					startGame(newGame);
+				} else if(e.target.id === "leaderboards-from-game") {
+					newGame.remove().then(response => {
+						newGame = new Game("single-player", windowProps, loggedUser);
+						Ui.showUI("leaderboards");
+					});
 				} else if(e.target.id === "start-single-player") {
 					Ui.hideUI("select-game-screen");
 					startGame(newGame);	

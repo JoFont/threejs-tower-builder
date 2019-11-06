@@ -45,7 +45,6 @@ export class Block {
         this.geometry.dispose();
         this.material.dispose();
         this.game.scene.remove(this.block);
-        console.log("Animated Block has been removed");
     }
 
     animateRemainder() {
