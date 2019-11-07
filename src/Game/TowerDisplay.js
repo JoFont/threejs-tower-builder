@@ -38,7 +38,7 @@ export class TowerDisplay extends Game {
             }); 
         });
     }
-
+    
     stage() {
         let self = this;
 
