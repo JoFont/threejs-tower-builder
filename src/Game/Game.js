@@ -123,7 +123,7 @@ export class Game {
         this.scene.add(this.camera);
         this.scene.add(this.light);
         this.scene.add(this.softLight);
-        this.scene.add(this.axesHelper);
+        // this.scene.add(this.axesHelper);
         this.scene.add(this.group);
 
         new Block(this, baseProps).add();
@@ -358,13 +358,5 @@ export class Game {
         });
     }
 
-    display() {
-        // this.stage();
-        // this.render();
-
-        // for(let i = 0; i < 40; i++) {
-        //     this.plac
-        // }
-    }
 }
 

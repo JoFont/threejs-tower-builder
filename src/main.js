@@ -1,4 +1,5 @@
 import { Game } from "./Game/Game";
+import { TowerDisplay } from "./Game/TowerDisplay";
 import { Ui } from "./Ui/Ui";
 import { html, render } from 'lit-html';
 
@@ -125,6 +126,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			handleLoggedIn(user);
 
 			let newGame = new Game("single-player", windowProps, user);
+
+			// let testDisplay = new TowerDisplay("display", windowProps).stage();
 
 			let requestAni;
 
