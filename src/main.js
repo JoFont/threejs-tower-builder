@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				}
 
 				requestAni = requestAnimationFrame(loop);
-				
+
 				document.addEventListener('keydown', e =>  {
 					if(e.keyCode === 32 && !game.state.lost) {
 						game.placeBlock();
