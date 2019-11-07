@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { TweenMax, Expo } from "gsap/all"; 
 import { DisplayBlock } from "./components/DisplayBlock";
 import { Game } from "./Game";
 
@@ -8,10 +9,16 @@ export class TowerDisplay extends Game {
         this.towers = [];
         this.meshTowerGroups = [];
 
-        this.towerPositions = [];
+        this.avaliableSpots = [5, -5, 10, -10, 15, -15, 20, -20, 25, -25];
         this.names = [];
 
-        this.axesHelper = new THREE.AxesHelper(100);
+
+        this.textParent = document.getElementById("tower-display-scores");
+        this.loader = new THREE.FontLoader();
+
+        this.animationFrame;
+
+        // this.axesHelper = new THREE.AxesHelper(100);
         
     }
 
@@ -40,29 +47,26 @@ export class TowerDisplay extends Game {
         this.scene.add(this.camera);
         this.scene.add(this.light);
         this.scene.add(this.softLight);
-        
+
         const color = 0xFFFFFF;
-        const density = 0.05;
+        const density = 0.03;
         this.scene.fog = new THREE.FogExp2(color, density);
 
 
         this.getTowers().then(() => {
-            self.towers.forEach(tower => {
+            self.towers.forEach((tower, i) => {
                 const group = new THREE.Group();
                 
-                const max = 10;
-                const min = -10;
-
-                const randomPos = Math.floor(Math.random()*(max-min+1)+min);
+                const max = 0;
+                const min = -3;
+                const randomDepth = Math.floor(Math.random()*(max-min+1)+min);
 
                 tower.forEach(layer => {
                     new DisplayBlock(group, layer).add();
                 });
 
-                group.position.set(-randomPos, -85, randomPos);
-
-                console.log(group.position);
-                // console.log(self.camera.position);
+                // console.log(group.position);
+                group.position.set(-self.avaliableSpots[i] * randomDepth, -84, self.avaliableSpots[i]);
 
                 self.meshTowerGroups.push(group);
                 self.scene.add(group);
@@ -75,5 +79,63 @@ export class TowerDisplay extends Game {
 
     render() {
         this.renderer.render(this.scene, this.camera);
+    }
+
+    renderText(props, pos) {
+        let container = document.createElement("div");
+        container.classList.add("tower-text-container");
+        container.innerHTML = `
+            <h5>${props.name}</h5>
+            <p>${props.score}</p>
+        `;
+
+        // const tempV = new THREE.Vector3();
+
+        // // get the position of the center of the cube
+        // props.pos.updateWorldMatrix(true, false);
+        // props.pos.getWorldPosition(tempV);
+        
+        // // get the normalized screen coordinate of that position
+        // // x and y will be in the -1 to +1 range with x = -1 being
+        // // on the left and y = -1 being on the bottom
+        // tempV.project(camera);
+        
+        // // convert the normalized position to CSS coordinates
+        // const x = (tempV.x *  .5 + .5) * canvas.clientWidth;
+        // const y = (tempV.y * -.5 + .5) * canvas.clientHeight;
+        
+        // // move the elem to that position
+        // elem.style.transform = `translate(-50%, -50%) translate(${x}px,${y}px)`;
+    }
+
+    remove() {
+        let self = this;
+
+        return new Promise((resolve, reject) => {
+            let counter = 0;
+
+            function removeBlock(group) {
+                group.children.forEach(mesh => {
+                    mesh.geometry.dispose();
+                    mesh.material.dispose();
+                });
+
+                counter++
+
+                if(counter === self.meshTowerGroups.length) {
+                    self.scene.dispose();
+                    self.$parentNode.removeChild(self.$domNode);
+                    resolve();
+                }
+            };
+            
+            self.meshTowerGroups.forEach((group, i) => {
+                // TweenMax.to(group.position, 3, {y: -200, delay: Math.log10(i), onComplete:removeBlock, onCompleteParams:[group]});
+
+                removeBlock(group);
+            });
+            
+        });
+        
     }
 }

@@ -127,7 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			let newGame = new Game("single-player", windowProps, user);
 
-			// let testDisplay = new TowerDisplay("display", windowProps).stage();
+			let towerDisplay = new TowerDisplay("display", windowProps);
+			towerDisplay.stage();
 
 			let requestAni;
 
@@ -238,8 +239,14 @@ document.addEventListener('DOMContentLoaded', function() {
 					Ui.switchView("leaderboards", "home-screen");
 				} else if(e.target.id === "replay-from-leaderboard") {
 					Ui.hideUI("leaderboards");
-					startGame(newGame);
+					
+					towerDisplay.remove().then(r => {
+						startGame(newGame);
+					});
 				} else if(e.target.id === "leaderboards-from-game") {
+					towerDisplay = new TowerDisplay("display", windowProps);
+					towerDisplay.stage();
+					
 					newGame.remove().then(response => {
 						cancelAnimationFrame(requestAni);
 						newGame = new Game("single-player", windowProps, loggedUser);
@@ -247,8 +254,9 @@ document.addEventListener('DOMContentLoaded', function() {
 					});
 				} else if(e.target.id === "start-single-player") {
 					Ui.hideUI("select-game-screen");
-					startGame(newGame);	
-					// game.start();
+					towerDisplay.remove().then(r => {
+						startGame(newGame);
+					});
 				} else if(e.target.id === "game-restart") {
 					newGame.remove().then(response => {
 						cancelAnimationFrame(requestAni);
@@ -268,8 +276,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 					addToLeaderboard({score: newGame.state.score, tower: newGame.state.tower, name: userName, date: Date.now()}).then(result => {
 						e.target.innerText = "Success";
+
+						towerDisplay = new TowerDisplay("display", windowProps);
+						towerDisplay.stage();
 						newGame.remove().then(response => {
-							// TODO: ADD DISPLAY VERSION OF THIS
 							cancelAnimationFrame(requestAni);
 							newGame = new Game("single-player", windowProps, loggedUser);
 							Ui.showUI("leaderboards");
