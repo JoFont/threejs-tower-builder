@@ -9,7 +9,7 @@ export class TowerDisplay extends Game {
         this.towers = [];
         this.meshTowerGroups = [];
 
-        this.avaliableSpots = [5, -5, 10, -10, 15, -15, 20, -20, 25, -25];
+        this.avaliableSpots = [-25, 25, -20, 20, -15, 15, -10, 10, -5, 5];
         this.names = [];
 
 
@@ -49,7 +49,7 @@ export class TowerDisplay extends Game {
         this.scene.add(this.softLight);
 
         const color = 0xFFFFFF;
-        const density = 0.03;
+        const density = 0.01;
         this.scene.fog = new THREE.FogExp2(color, density);
 
 
@@ -58,7 +58,7 @@ export class TowerDisplay extends Game {
                 const group = new THREE.Group();
                 
                 const max = 0;
-                const min = -3;
+                const min = -2;
                 const randomDepth = Math.floor(Math.random()*(max-min+1)+min);
 
                 tower.forEach(layer => {
@@ -66,7 +66,7 @@ export class TowerDisplay extends Game {
                 });
 
                 // console.log(group.position);
-                group.position.set(-self.avaliableSpots[i] * randomDepth, -84, self.avaliableSpots[i]);
+                group.position.set(-self.avaliableSpots[i] * randomDepth, -90 + self.avaliableSpots[i], self.avaliableSpots[i]);
 
                 self.meshTowerGroups.push(group);
                 self.scene.add(group);
