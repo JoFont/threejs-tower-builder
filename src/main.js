@@ -137,13 +137,6 @@ document.addEventListener('DOMContentLoaded', function() {
 				window.addEventListener("resize",() => {
 					game.updateSize();
 				}, false);
-			
-				document.addEventListener('keydown', e =>  {
-					if(e.keyCode === 32 && !game.state.lost) {
-						game.placeBlock();
-					}
-				});
-
 				
 				// Game loop
 				function loop() {
@@ -165,7 +158,22 @@ document.addEventListener('DOMContentLoaded', function() {
 				}
 
 				requestAni = requestAnimationFrame(loop);
+				
+				document.addEventListener('keydown', e =>  {
+					if(e.keyCode === 32 && !game.state.lost) {
+						game.placeBlock();
+					} else if (e.keyCode === 82 && !game.state.lost) {
+						// FIXME: Throwing weird error
+						// game.remove().then(response => {
+						// 	cancelAnimationFrame(requestAni);
+						// 	newGame = new Game("single-player", windowProps, loggedUser);
+						// 	startGame(newGame);
+						// });
+					}
+				});
 			}
+
+
 			
 			// Firebase Functions
 			const addToLeaderboard = firebase.functions().httpsCallable("addToLeaderboard");
