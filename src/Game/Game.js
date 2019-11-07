@@ -175,7 +175,7 @@ export class Game {
             this.handleGameLoss(activeBlockProps);
         } else {
             // Dispose of Old Block
-            this.screenShake.shake(this.camera, new THREE.Vector3(0.8, 0.8, 0), 200);
+            this.screenShake.shake(this.camera, new THREE.Vector3(0.3, 0.3, 0), 180);
 
             this.state.activeBlock.material.dispose();
             this.state.activeBlock.geometry.dispose();
