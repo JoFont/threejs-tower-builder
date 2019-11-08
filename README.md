@@ -4,6 +4,8 @@ This repo contains the first project from Ironhack's Bootcamp in Lisbon where th
 
 
 ## Getting started
+### Important
+> This repository has code for Firebase deployment, which will not work on any machine whose not authenticated so, cloning this repo is very much useless unless you've been invited into the firebase project.
 
 Clone this repository and install its dependencies:
 
