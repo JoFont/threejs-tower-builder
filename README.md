@@ -1,6 +1,6 @@
 # Three JS - Tower Builder
 
-This repo contains a bare-bones of what will become a Three js Tower Builder game `hopefully`.
+This repo contains the first project from Ironhack's Bootcamp in Lisbon where the assignment was to build a game.
 
 
 ## Getting started
@@ -26,3 +26,4 @@ npm install
 1. [Rollup Package Bundler Docs](https://rollupjs.org/guide/en/) 
 2. [Three js Docs](https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene)
 3. [Tween Max Docs](https://greensock.com/docs/TweenMax)
+4. [lit-html](https://lit-html.polymer-project.org/)
