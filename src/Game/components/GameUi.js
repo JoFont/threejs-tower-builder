@@ -1,7 +1,4 @@
 import { Ui } from "../../Ui/Ui";
-import { TweenMax, CSSPlugin, AttrPlugin } from "gsap/all";
-const plugins = [CSSPlugin, AttrPlugin];
-
 
 export class GameUi extends Ui {
     constructor(container, parent, game) {
