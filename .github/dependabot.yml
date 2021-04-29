@@ -1,0 +1,20 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: monthly
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: rollup
+    versions:
+    - 2.35.1
+    - 2.38.3
+  - dependency-name: three
+    versions:
+    - 0.124.0
+    - 0.125.2
+  - dependency-name: firebase
+    versions:
+    - 8.2.1
+    - 8.2.5
