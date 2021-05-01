@@ -15,7 +15,7 @@
     "firebaseui": "^4.2.0",
     "gsap": "^3.0.1",
     "lit-html": "^1.1.2",
-    "three": "^0.113.2"
+    "three": "^0.128.0"
   },
   "scripts": {
     "build": "rollup -c",
